@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HUNGRY – Restaurant Directory</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    /* ── TOKENS ── */
+    :root {
+      --green:       #3fd696;
+      --orange:      #ff866a;
+      --pink:        #fe6d9b;
+      --dark-gray:   #52526c;
+      --mid-gray:    #767187;
+      --blue:        #0099ff;
+      --gray-100:    #f0f1f9;
+      --gray-200:    #e2e3ef;
+      --gray-300:    #d0d1e0;
+      --gray-400:    #a8a9c0;
+      --gray-500:    #787897;
+      --gray-600:    #606180;
+      --gray-900:    #282840;
+      --disabled:    #d5d5d5;
+      --disabled-txt:#a3a6a9;
+      --bg:          #f8f8f8;
+      --white:       #ffffff;
+      --gradient:    linear-gradient(90deg, #ff866a, #fe6d9b);
+      --r-pill:      60px;
+      --r-card:      20px;
+      --r-sm:        8px;
+      --r-xs:        4px;
+      --font:        'Poppins', sans-serif;
+      --nav-h:       72px;
+      --filter-h:    64px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--gray-900);
+      min-height: 100vh;
+    }
+
+    /* ── STICKY HEADER ── */
+    .sticky-header {
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      background: var(--white);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    }
+
+    /* ── NAV BAR ── */
+    .nav-bar {
+      display: flex;
+      align-items: center;
+      padding: 0 32px;
+      height: var(--nav-h);
+      gap: 8px;
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex: 1;
+      min-width: 0;
+    }
+
+    /* Logo */
+    .logo {
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+    .logo-hungry { background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .logo-hub    { color: var(--gray-900); }
+
+    /* Delivery toggle */
+    .delivery-toggle {
+      display: flex;
+      background: var(--gray-100);
+      border-radius: var(--r-pill);
+      padding: 4px;
+      gap: 2px;
+      flex-shrink: 0;
+    }
+    .toggle-btn {
+      padding: 6px 14px;
+      border-radius: var(--r-pill);
+      border: none;
+      background: transparent;
+      font-family: var(--font);
+      font-size: 13px;
+      cursor: pointer;
+      color: var(--mid-gray);
+      line-height: 1.3;
+      text-align: center;
+      transition: all 0.15s;
+    }
+    .toggle-btn small { display: block; font-size: 9px; color: var(--disabled-txt); }
+    .toggle-btn.active {
+      background: var(--white);
+      color: var(--orange);
+      font-weight: 600;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    }
+
+    /* Nav detail links */
+    .nav-details {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      flex-shrink: 0;
+    }
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 6px 10px;
+      border-radius: var(--r-pill);
+      color: var(--orange);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      background: none;
+      font-family: var(--font);
+      white-space: nowrap;
+      transition: background 0.15s;
+    }
+    .nav-link:hover { background: #fff5f2; }
+    .nav-sep { color: var(--gray-400); font-size: 14px; }
+
+    /* Right side */
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+    .search-wrap {
+      display: flex;
+      align-items: center;
+      background: var(--gray-100);
+      border-radius: var(--r-pill);
+      padding: 10px 16px;
+      gap: 8px;
+      width: 280px;
+    }
+    .search-wrap svg { flex-shrink: 0; color: var(--gray-400); }
+    .search-wrap input {
+      border: none;
+      background: transparent;
+      font-family: var(--font);
+      font-size: 13px;
+      color: var(--gray-600);
+      outline: none;
+      width: 100%;
+    }
+    .search-wrap input::placeholder { color: var(--gray-400); }
+
+    .btn-ghost {
+      padding: 8px 14px;
+      border-radius: var(--r-pill);
+      border: none;
+      background: transparent;
+      font-family: var(--font);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--orange);
+      cursor: pointer;
+      white-space: nowrap;
+      letter-spacing: 0.04em;
+      transition: background 0.15s;
+    }
+    .btn-ghost:hover { background: #fff5f2; }
+
+    .cart-btn {
+      position: relative;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      border-radius: 50%;
+      transition: background 0.15s;
+    }
+    .cart-btn:hover { background: var(--gray-100); }
+    .cart-badge {
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      background: var(--orange);
+      color: white;
+      font-size: 8px;
+      font-weight: 800;
+      min-width: 16px;
+      height: 16px;
+      border-radius: 9999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 3px;
+    }
+    .menu-btn {
+      width: 40px; height: 40px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 50%;
+      border: none; background: none; cursor: pointer;
+      transition: background 0.15s;
+    }
+    .menu-btn:hover { background: var(--gray-100); }
+
+    /* ── FILTER BAR ── */
+    .filter-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      height: var(--filter-h);
+      border-top: 1px solid var(--gray-100);
+    }
+    .filter-left { display: flex; align-items: center; gap: 4px; }
+
+    .serving-group { display: flex; align-items: center; gap: 4px; }
+    .serving-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 12px;
+      border-radius: var(--r-pill);
+      border: none;
+      background: transparent;
+      font-family: var(--font);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      color: var(--dark-gray);
+      white-space: nowrap;
+      transition: all 0.15s;
+    }
+    .serving-btn.active { color: var(--orange); }
+    .serving-icon {
+      width: 24px; height: 24px;
+      border-radius: var(--r-xs);
+      background: var(--gray-200);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px;
+      transition: background 0.15s;
+    }
+    .serving-btn.active .serving-icon { background: var(--orange); }
+
+    .filter-sep {
+      width: 1px; height: 28px;
+      background: var(--gray-200);
+      margin: 0 6px;
+      flex-shrink: 0;
+    }
+
+    .filter-chips { display: flex; gap: 2px; }
+    .chip {
+      display: flex; align-items: center; gap: 5px;
+      padding: 7px 14px;
+      border-radius: var(--r-pill);
+      border: none;
+      background: transparent;
+      font-family: var(--font);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--orange);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.15s;
+    }
+    .chip:hover { background: #fff5f2; }
+    .chip.active { background: #fff5f2; font-weight: 700; }
+
+    .sort-btn {
+      display: flex; align-items: center; gap: 6px;
+      padding: 8px 16px;
+      border-radius: var(--r-pill);
+      border: none;
+      background: transparent;
+      font-family: var(--font);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--orange);
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .sort-btn:hover { background: #fff5f2; }
+
+    /* ── RESULTS BAR ── */
+    .results-bar {
+      padding: 6px 32px;
+      background: var(--white);
+      border-top: 1px solid var(--gray-100);
+      font-size: 14px;
+      color: var(--gray-500);
+    }
+    .results-bar[hidden] { display: none !important; }
+
+    /* ── MAIN ── */
+    .main { padding: 24px 32px 64px; }
+
+    /* ── GRID ── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    /* ── RESTAURANT CARD ── */
+    .card {
+      background: var(--white);
+      border-radius: var(--r-card);
+      overflow: hidden;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .card:hover {
+      box-shadow: 0 8px 28px rgba(0,0,0,0.13);
+      transform: translateY(-3px);
+    }
+
+    /* Card image */
+    .card-img {
+      position: relative;
+      height: 190px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .card-img img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.3s;
+    }
+    .card:hover .card-img img { transform: scale(1.04); }
+    .card-img-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom, transparent 50%, rgba(0,0,0,0.25) 100%);
+    }
+
+    .card-badges {
+      position: absolute; top: 10px; right: 10px;
+      display: flex; flex-wrap: wrap; gap: 4px; justify-content: flex-end;
+    }
+    .badge {
+      display: flex; align-items: center; gap: 4px;
+      padding: 3px 9px;
+      border-radius: var(--r-pill);
+      font-size: 11px; font-weight: 600;
+      white-space: nowrap; line-height: 1.5;
+    }
+    .badge-featured { background: var(--gradient); color: white; }
+    .badge-crowd    { background: rgba(40,40,64,0.82); color: white; }
+    .badge-new      { background: var(--green); color: white; }
+
+    .card-formats {
+      position: absolute; bottom: 10px; right: 10px;
+      display: flex; gap: 6px;
+    }
+    .fmt-icon {
+      width: 28px; height: 28px;
+      border-radius: var(--r-xs);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px;
+    }
+    .fmt-platters   { background: rgba(40,40,64,0.85); }
+    .fmt-individual { background: rgba(255,134,106,0.9); }
+
+    /* Card body */
+    .card-body {
+      padding: 14px 16px 16px;
+      display: flex; flex-direction: column; gap: 8px;
+      flex: 1;
+    }
+
+    .card-name {
+      font-size: 17px; font-weight: 600;
+      color: var(--gray-900); line-height: 1.25;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+
+    .card-tagline {
+      font-size: 13px; color: var(--mid-gray); line-height: 1.55;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      min-height: 40px;
+    }
+
+    .card-tags {
+      display: flex; align-items: center; gap: 5px;
+      font-size: 13px; color: var(--gray-500); font-weight: 500;
+      flex-wrap: wrap;
+    }
+    .tag-dot {
+      width: 3px; height: 3px; border-radius: 50%;
+      background: var(--gray-400); flex-shrink: 0;
+    }
+    .tag-more { color: var(--orange); font-weight: 600; }
+
+    .card-dietary { display: flex; gap: 4px; flex-wrap: wrap; }
+    .dtag {
+      display: flex; align-items: center; gap: 3px;
+      padding: 3px 7px;
+      background: var(--gray-100);
+      border-radius: var(--r-pill);
+      font-size: 11px; font-weight: 500;
+      color: var(--dark-gray);
+    }
+
+    /* ── LOAD MORE ── */
+    .load-more-wrap {
+      display: flex; justify-content: center;
+      margin-top: 40px;
+    }
+    .load-more-btn {
+      padding: 14px 44px;
+      border-radius: var(--r-pill);
+      background: var(--gradient);
+      color: white;
+      font-family: var(--font);
+      font-size: 13px; font-weight: 800;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      border: none; cursor: pointer;
+      box-shadow: 0 4px 16px rgba(255,134,106,0.35);
+      transition: opacity 0.2s, transform 0.2s, box-shadow 0.2s;
+    }
+    .load-more-btn:hover {
+      opacity: 0.92; transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(255,134,106,0.4);
+    }
+    .load-more-btn:active { transform: translateY(0); }
+    [hidden] { display: none !important; }
+
+    /* ── EMPTY STATE ── */
+    .empty-state {
+      grid-column: 1 / -1;
+      padding: 80px 32px;
+      text-align: center;
+      color: var(--gray-400);
+    }
+    .empty-state h3 { font-size: 20px; font-weight: 600; margin-bottom: 8px; }
+    .empty-state p  { font-size: 14px; }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════
+     STICKY HEADER (nav + filter + results bar)
+════════════════════════════════════════════ -->
+<div class="sticky-header">
+
+  <!-- NAV BAR -->
+  <nav class="nav-bar">
+    <div class="nav-left">
+      <!-- Logo -->
+      <a href="#" class="logo">
+        <span class="logo-hungry">hungry</span><span class="logo-hub">hub</span>
+      </a>
+
+      <!-- Delivery / Pick-up toggle -->
+      <div class="delivery-toggle">
+        <button class="toggle-btn active" data-toggle="delivery">Delivery</button>
+        <button class="toggle-btn" data-toggle="pickup">
+          Pick-up
+          <small>Coming soon</small>
+        </button>
+      </div>
+
+      <!-- Address + Time -->
+      <div class="nav-details">
+        <button class="nav-link">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          190 John Street
+        </button>
+        <span class="nav-sep">•</span>
+        <button class="nav-link">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          Nov 29, 12:45 PM
+        </button>
+      </div>
+    </div>
+
+    <div class="nav-right">
+      <!-- Search -->
+      <div class="search-wrap">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="search-input" placeholder="Caterer, cuisine, items">
+      </div>
+
+      <!-- Log in -->
+      <button class="btn-ghost">LOG IN</button>
+
+      <!-- Cart -->
+      <div class="cart-btn">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        <span class="cart-badge" id="cart-count">3</span>
+      </div>
+
+      <!-- Hamburger -->
+      <button class="menu-btn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+  </nav>
+
+  <!-- FILTER BAR -->
+  <div class="filter-bar">
+    <div class="filter-left">
+      <!-- Serving style -->
+      <div class="serving-group">
+        <button class="serving-btn active" data-serving="all">
+          <span class="serving-icon">🍽</span> Platters &amp; Family-Style
+        </button>
+        <button class="serving-btn" data-serving="individual">
+          <span class="serving-icon">🥡</span> Individual Meals
+        </button>
+        <button class="serving-btn" data-serving="utensils">
+          <span class="serving-icon">🥄</span> Utensils
+        </button>
+      </div>
+
+      <div class="filter-sep"></div>
+
+      <!-- Filter chips -->
+      <div class="filter-chips">
+        <button class="chip">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="10" y1="18" x2="14" y2="18"/></svg>
+          Cuisine
+        </button>
+        <button class="chip">Dietary Preferences</button>
+        <button class="chip">Featured</button>
+        <button class="chip">More Filters
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <button class="sort-btn">
+      Sort
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+  </div>
+
+  <!-- RESULTS BAR — hidden unless Browse by City mode -->
+  <div class="results-bar" id="results-bar" hidden>
+    <span id="results-count">0 Restaurants</span>
+  </div>
+
+</div><!-- /sticky-header -->
+
+
+<!-- ═══════════════════════════════════════════
+     MAIN CONTENT
+════════════════════════════════════════════ -->
+<main class="main">
+  <div class="grid" id="grid"></div>
+
+  <div class="load-more-wrap">
+    <button class="load-more-btn" id="load-more-btn" hidden>
+      Load More Restaurants
+    </button>
+  </div>
+</main>
+
+
+<script>
+/* ─────────────────────────────────────────────
+   MOCK DATA
+   In production: replace with API call filtered
+   by predetermined radius from user's address.
+───────────────────────────────────────────── */
+const ALL_RESTAURANTS = [
+  {
+    id: 1, name: "[Restaurant Name]", location: null, featured: true,
+    tagline: "Fresh and vibrant bowls made from locally sourced ingredients. Healthy eating has never tasted so good for your whole team.",
+    image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=600&q=80",
+    tags: ["Salads", "Bowls", "Healthy", "Vegan"],
+    dietary: ["GF", "VE", "NF"],
+    badges: ["crowd", "featured", "new"],
+    formats: ["platters", "individual"],
+  },
+  {
+    id: 2, name: "Mandy's (The Well)", location: "The Well", featured: true,
+    tagline: "Legendary Montreal salads and wraps, now available for corporate catering. Always fresh, always vibrant, never boring.",
+    image: "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=600&q=80",
+    tags: ["Salads", "Wraps", "Healthy"],
+    dietary: ["GF", "VE", "NF"],
+    badges: ["featured"],
+    formats: ["platters"],
+  },
+  {
+    id: 3, name: "Doughbox Wood Fire Pizza", location: null, featured: true,
+    tagline: "Artisan wood-fired pizzas crafted with premium toppings and house-made dough. A guaranteed crowd-pleaser every single time.",
+    image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=600&q=80",
+    tags: ["Pizza", "Italian", "Comfort Food", "Sharing"],
+    dietary: ["VE"],
+    badges: ["crowd", "new"],
+    formats: ["platters"],
+  },
+  {
+    id: 4, name: "Pronto Cafe To Go", location: null, featured: false,
+    tagline: "Quick, delicious café-style catering for any office occasion. Sandwiches, salads and fresh baked goods made daily.",
+    image: "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=600&q=80",
+    tags: ["Cafe", "Sandwiches", "Breakfast"],
+    dietary: ["GF", "VE"],
+    badges: [],
+    formats: ["individual"],
+  },
+  {
+    id: 5, name: "Brasa", location: null, featured: false,
+    tagline: "South American rotisserie with bold flavours and generous portions. Perfect for team lunches and large corporate events.",
+    image: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=600&q=80",
+    tags: ["Latin", "Rotisserie", "BBQ"],
+    dietary: ["GF", "NF"],
+    badges: ["crowd"],
+    formats: ["platters"],
+  },
+  {
+    id: 6, name: "Sushi Shop", location: "Wellington", featured: true,
+    tagline: "Premium sushi platters and bento boxes ideal for professional settings. Prepared fresh daily by our experienced chefs.",
+    image: "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=600&q=80",
+    tags: ["Japanese", "Sushi", "Bento"],
+    dietary: ["GF"],
+    badges: ["featured", "new"],
+    formats: ["platters", "individual"],
+  },
+  {
+    id: 7, name: "Light Cafe", location: null, featured: false,
+    tagline: "Health-conscious café serving nutritious meals that fuel your team through the entire workday without a mid-afternoon slump.",
+    image: "https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=600&q=80",
+    tags: ["Healthy", "Cafe", "Vegan"],
+    dietary: ["GF", "VE", "NF"],
+    badges: ["new"],
+    formats: ["individual"],
+  },
+  {
+    id: 8, name: "Kupfert & Kim", location: null, featured: true,
+    tagline: "100% plant-based, gluten-free catering that proves healthy food can be truly delicious and satisfying for everyone.",
+    image: "https://images.unsplash.com/photo-1543339308-43e59d6b73a6?w=600&q=80",
+    tags: ["Vegan", "Gluten-Free", "Bowls", "Plant-Based"],
+    dietary: ["GF", "VE", "NF"],
+    badges: ["featured"],
+    formats: ["platters", "individual"],
+  },
+  {
+    id: 9, name: "Freshii", location: "Yorkville", featured: true,
+    tagline: "Vibrant, fully customizable wraps, bowls and salads for health-conscious corporate teams who want variety.",
+    image: "https://images.unsplash.com/photo-1506484381205-f7945653044d?w=600&q=80",
+    tags: ["Healthy", "Bowls", "Wraps", "Salads"],
+    dietary: ["VE"],
+    badges: ["crowd", "featured"],
+    formats: ["individual"],
+  },
+  {
+    id: 10, name: "Terroni", location: "Queen", featured: true,
+    tagline: "Authentic southern Italian cuisine — handcrafted pasta and wood-oven dishes made with imported ingredients for discerning palates.",
+    image: "https://images.unsplash.com/photo-1473093226795-af9932fe5856?w=600&q=80",
+    tags: ["Italian", "Pasta", "Pizza"],
+    dietary: ["VE"],
+    badges: ["featured"],
+    formats: ["platters"],
+  },
+  {
+    id: 11, name: "Le Gourmand", location: null, featured: false,
+    tagline: "Classic French-inspired catering with modern Canadian touches. Sophisticated meals designed for high-profile corporate events.",
+    image: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&q=80",
+    tags: ["French", "Fine Dining", "European"],
+    dietary: ["GF", "NF"],
+    badges: ["new"],
+    formats: ["platters"],
+  },
+  {
+    id: 12, name: "Nodo", location: "Eglinton", featured: false,
+    tagline: "Gluten-free Italian favourites — because dietary restrictions should never mean missing out on great pizza and pasta.",
+    image: "https://images.unsplash.com/photo-1559847844-5315695dadae?w=600&q=80",
+    tags: ["Italian", "Gluten-Free", "Pizza"],
+    dietary: ["GF", "VE"],
+    badges: ["crowd"],
+    formats: ["platters", "individual"],
+  },
+  /* ── Page 2 (loaded on "Load More") ── */
+  {
+    id: 13, name: "Pai", location: "King West", featured: false,
+    tagline: "Authentic Northern Thai street food for the adventurous office. Bold, aromatic and truly unforgettable flavours.",
+    image: "https://images.unsplash.com/photo-1562565652-a0d8f0c59eb4?w=600&q=80",
+    tags: ["Thai", "Asian", "Spicy"],
+    dietary: ["GF"],
+    badges: ["crowd"],
+    formats: ["individual"],
+  },
+  {
+    id: 14, name: "The Carbon Bar", location: null, featured: true,
+    tagline: "American BBQ and slow-smoked meats that bring people together. The ultimate crowd-pleaser for any corporate gathering.",
+    image: "https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?w=600&q=80",
+    tags: ["BBQ", "American", "Smoked", "Sharing"],
+    dietary: ["GF"],
+    badges: ["crowd", "featured"],
+    formats: ["platters"],
+  },
+  {
+    id: 15, name: "Ramen Isshin", location: null, featured: false,
+    tagline: "Rich, soul-warming broths and handcrafted noodles. Comfort food that keeps your team energized through the afternoon.",
+    image: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=600&q=80",
+    tags: ["Japanese", "Ramen", "Asian"],
+    dietary: ["NF"],
+    badges: [],
+    formats: ["individual"],
+  },
+];
+
+/* ─────────────────────────────────────────────
+   STATE
+───────────────────────────────────────────── */
+const PAGE_SIZE      = 12;
+let   currentPage    = 1;
+let   filtered       = [];
+let   searchQuery    = "";
+let   activeServing  = "all";   // "all" | "individual" | "utensils"
+let   isBrowseByCity = false;   // true → show results bar while scrolling
+
+/* ─────────────────────────────────────────────
+   HELPERS
+───────────────────────────────────────────── */
+const DIETARY_LABEL = { GF: "🌾 GF", VE: "🌿 VE", NF: "🥜 NF" };
+const BADGE_HTML = {
+  featured: `<span class="badge badge-featured">⭐ hungerhub featured</span>`,
+  crowd:    `<span class="badge badge-crowd">♥ Crowd Pleaser</span>`,
+  new:      `<span class="badge badge-new">New</span>`,
+};
+const FORMAT_HTML = {
+  platters:   `<span class="fmt-icon fmt-platters"   title="Platters & Family-Style">🍽</span>`,
+  individual: `<span class="fmt-icon fmt-individual" title="Individual Meals">🥡</span>`,
+};
+
+function buildCardHTML(r) {
+  /* Restaurant name: append (location) if set */
+  const displayName = r.location ? `${r.name} (${r.location})` : r.name;
+
+  /* Badges */
+  const badgesHTML = r.badges.map(b => BADGE_HTML[b] || "").join("");
+
+  /* Format icons */
+  const formatsHTML = r.formats.map(f => FORMAT_HTML[f] || "").join("");
+
+  /* Menu tags — show first 2 + "+X More" if total > 3, else show up to 3 */
+  const MAX_TAGS = 3;
+  const showExtra = r.tags.length > MAX_TAGS;
+  const visibleTags = showExtra ? r.tags.slice(0, 2) : r.tags.slice(0, MAX_TAGS);
+  const extraCount  = r.tags.length - visibleTags.length;
+  const tagsHTML = visibleTags
+    .map((t, i) => `${i > 0 ? '<span class="tag-dot"></span>' : ''}${t}`)
+    .join("")
+    + (extraCount > 0 ? `<span class="tag-dot"></span><span class="tag-more">+${extraCount} More</span>` : "");
+
+  /* Dietary tags — show all, max 6 */
+  const MAX_DIETARY = 6;
+  const dietaryHTML = r.dietary.slice(0, MAX_DIETARY)
+    .map(d => `<span class="dtag">${DIETARY_LABEL[d] || d}</span>`)
+    .join("");
+
+  return `
+    <a class="card" href="#" onclick="openRestaurant(${r.id}); return false;">
+      <div class="card-img">
+        <img src="${r.image}" alt="${displayName}" loading="lazy">
+        <div class="card-img-overlay"></div>
+        <div class="card-badges">${badgesHTML}</div>
+        <div class="card-formats">${formatsHTML}</div>
+      </div>
+      <div class="card-body">
+        <div class="card-name">${displayName}</div>
+        <div class="card-tagline">${r.tagline}</div>
+        <div class="card-tags">${tagsHTML}</div>
+        <div class="card-dietary">${dietaryHTML}</div>
+      </div>
+    </a>`;
+}
+
+/* ─────────────────────────────────────────────
+   RENDER
+───────────────────────────────────────────── */
+function applyFilters() {
+  filtered = ALL_RESTAURANTS.filter(r => {
+    /* Search filter */
+    if (searchQuery) {
+      const q = searchQuery.toLowerCase();
+      const match =
+        r.name.toLowerCase().includes(q) ||
+        r.tags.some(t => t.toLowerCase().includes(q));
+      if (!match) return false;
+    }
+    /* Serving style filter */
+    if (activeServing !== "all" && !r.formats.includes(activeServing)) return false;
+    return true;
+  });
+
+  /* Default sort: featured first */
+  filtered.sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
+  currentPage = 1;
+}
+
+function render() {
+  const grid    = document.getElementById("grid");
+  const loadBtn = document.getElementById("load-more-btn");
+  const countEl = document.getElementById("results-count");
+
+  const visible = filtered.slice(0, currentPage * PAGE_SIZE);
+
+  if (filtered.length === 0) {
+    grid.innerHTML = `
+      <div class="empty-state">
+        <h3>No restaurants found</h3>
+        <p>Try a different search or adjust your filters.</p>
+      </div>`;
+    loadBtn.hidden = true;
+  } else {
+    grid.innerHTML = visible.map(buildCardHTML).join("");
+    loadBtn.hidden = filtered.length <= currentPage * PAGE_SIZE;
+  }
+
+  countEl.textContent = `${filtered.length} Restaurant${filtered.length !== 1 ? "s" : ""}`;
+}
+
+/* ─────────────────────────────────────────────
+   INTERACTIONS
+───────────────────────────────────────────── */
+function loadMore() {
+  currentPage++;
+  render();
+  /* Scroll to first new card */
+  const cards = document.querySelectorAll(".card");
+  const firstNew = cards[(currentPage - 1) * PAGE_SIZE];
+  if (firstNew) firstNew.scrollIntoView({ behavior: "smooth", block: "nearest" });
+}
+
+function openRestaurant(id) {
+  /* In production: navigate to /menus/:id */
+  console.log("Open restaurant", id);
+}
+
+/* Delivery toggle */
+document.querySelectorAll("[data-toggle]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll("[data-toggle]").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+  });
+});
+
+/* Serving style */
+document.querySelectorAll("[data-serving]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll("[data-serving]").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    activeServing = btn.dataset.serving;
+    applyFilters();
+    render();
+  });
+});
+
+/* Search */
+document.getElementById("search-input").addEventListener("input", e => {
+  searchQuery = e.target.value.trim();
+  applyFilters();
+  render();
+});
+
+/* Load more */
+document.getElementById("load-more-btn").addEventListener("click", loadMore);
+
+/* Results bar visibility: show only in Browse by City mode */
+function setBrowseByCityMode(enabled) {
+  isBrowseByCity = enabled;
+  document.getElementById("results-bar").hidden = !enabled;
+}
+
+/* ─────────────────────────────────────────────
+   INIT
+───────────────────────────────────────────── */
+applyFilters();
+render();
+
+/* Example: call setBrowseByCityMode(true) to enable results bar */
+/* setBrowseByCityMode(true); */
+</script>
+</body>
+</html>
