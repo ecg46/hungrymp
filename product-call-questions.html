@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hungry Marketplace — Product Call Questions</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --green:   #3fd696;
+            --orange:  #ff866a;
+            --pink:    #fe6d9b;
+            --dark:    #282840;
+            --gray-text: #52526c;
+            --muted:   #767187;
+            --bg:      #f0f1f9;
+            --surface: #ffffff;
+            --border:  #e2e3ef;
+            --note-bg: #fafbff;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg);
+            color: var(--gray-text);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* ── HEADER ── */
+        .header {
+            background: var(--dark);
+            color: white;
+            padding: 24px 48px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .header h1 { font-size: 18px; font-weight: 700; letter-spacing: -0.3px; color: white; }
+        .header-meta { font-size: 12px; color: #9998b8; margin-top: 3px; }
+
+        /* ── TABS ── */
+        .tab-bar { display: flex; margin-top: 16px; }
+        .tab-btn {
+            background: none; border: none; color: #9998b8;
+            font-family: 'Poppins', sans-serif; font-size: 13px; font-weight: 500;
+            padding: 10px 20px; cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: color 0.15s, border-color 0.15s;
+        }
+        .tab-btn:hover { color: #e2e3ef; }
+        .tab-btn.active { color: var(--green); border-bottom-color: var(--green); }
+
+        /* ── TAB PANELS ── */
+        .tab-panel { display: none; }
+        .tab-panel.active { display: block; }
+
+        /* ── MAIN ── */
+        .main { padding: 32px 48px 80px; max-width: 900px; }
+
+        /* ── LEGEND ── */
+        .legend {
+            display: flex; gap: 14px; flex-wrap: wrap;
+            margin-bottom: 28px; padding: 12px 16px;
+            background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+        }
+        .legend-item { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--muted); }
+        .legend-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+        /* ── SECTION HEADING ── */
+        .section-block { margin-top: 36px; }
+        .section-block:first-child { margin-top: 0; }
+        .section-heading { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+        .section-heading h2 {
+            font-size: 11px; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 1px; color: var(--muted); white-space: nowrap;
+        }
+        .section-heading::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+        /* ── QUESTION CARD ── */
+        .q-card {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 10px; margin-bottom: 12px; overflow: hidden;
+            transition: box-shadow 0.3s;
+        }
+        .q-card.foundational { border-color: var(--green); border-width: 1.5px; }
+        .q-card.highlight { box-shadow: 0 0 0 3px rgba(63, 214, 150, 0.35); }
+        .q-top { padding: 18px 20px 14px; }
+        .q-meta { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+        .q-num { font-size: 11px; font-weight: 600; color: var(--muted); }
+        .q-audit-ref { font-size: 10px; color: #b0afc8; }
+        .tag {
+            font-size: 10px; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.5px; padding: 2px 8px; border-radius: 20px;
+        }
+        .tag-ui            { background: #e6faf3; color: #1a9e6e; }
+        .tag-functionality { background: #fff1ed; color: #c94f2a; }
+        .tag-both          { background: #fff0f5; color: #c42e6b; }
+        .tag-tbd           { background: #f0f1f9; color: var(--muted); }
+        .q-text { font-size: 15px; font-weight: 600; color: var(--dark); line-height: 1.4; margin-bottom: 8px; }
+        .q-context {
+            font-size: 12px; color: var(--muted); line-height: 1.6;
+            padding: 8px 12px; background: var(--bg); border-radius: 6px;
+        }
+        .q-context strong { color: var(--gray-text); }
+
+        /* ── RADIO DECISION ── */
+        .radio-decision {
+            display: flex; gap: 10px; padding: 10px 12px 0;
+        }
+        .radio-option {
+            display: flex; align-items: center; gap: 6px;
+            font-size: 12px; font-weight: 500; color: var(--gray-text);
+            cursor: pointer; padding: 5px 12px;
+            border: 1px solid var(--border); border-radius: 20px;
+            transition: background 0.15s, border-color 0.15s, color 0.15s;
+        }
+        .radio-option input[type="radio"] { display: none; }
+        .radio-option:has(input:checked) { font-weight: 600; }
+        .radio-option.opt-keep:has(input:checked) {
+            background: #e6faf3; border-color: #b2edd0; color: #1a9e6e;
+        }
+        .radio-option.opt-change:has(input:checked) {
+            background: #fff1ed; border-color: #ffd0bc; color: #c94f2a;
+        }
+
+        /* ── DASHBOARD CHECKLIST ── */
+        .dash-list {
+            margin: 10px 20px 0;
+            padding: 10px 12px;
+            background: var(--bg); border-radius: 6px;
+        }
+        .dash-list-label {
+            font-size: 10px; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.6px; color: #b0afc8; margin-bottom: 8px;
+        }
+        .dash-items { display: flex; flex-direction: column; gap: 6px; }
+        .dash-item {
+            display: flex; align-items: center; gap: 8px;
+            font-size: 13px; color: var(--gray-text); cursor: pointer;
+            padding: 2px 0;
+        }
+        .dash-item input[type="checkbox"] {
+            accent-color: var(--green); width: 14px; height: 14px;
+            cursor: pointer; flex-shrink: 0;
+        }
+        .dash-item:has(input:checked) { color: #1a9e6e; font-weight: 500; }
+
+        /* ── NOTES ── */
+        .q-notes { padding: 12px 20px 16px; border-top: 1px solid var(--border); margin-top: 12px; }
+        .notes-label {
+            font-size: 10px; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.6px; color: #b0afc8; margin-bottom: 6px;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .saved-flash {
+            font-size: 10px; font-weight: 500; color: var(--green);
+            text-transform: none; letter-spacing: 0; opacity: 0; transition: opacity 0.2s;
+        }
+        .saved-flash.show { opacity: 1; }
+        textarea.note-input {
+            width: 100%; min-height: 64px; padding: 10px 12px;
+            border: 1px solid var(--border); border-radius: 6px;
+            font-size: 13px; font-family: 'Poppins', sans-serif;
+            color: var(--gray-text); background: var(--note-bg);
+            resize: vertical; outline: none; line-height: 1.6;
+            transition: border-color 0.15s, background 0.15s;
+        }
+        textarea.note-input:focus { border-color: var(--green); background: white; }
+        textarea.note-input::placeholder { color: #c8c7d8; }
+
+        /* ── AUDIT TAB ── */
+        .structural-notes {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 8px; padding: 16px 20px; margin-bottom: 28px;
+        }
+        .structural-notes h3 {
+            font-size: 11px; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.8px; color: var(--muted); margin-bottom: 10px;
+        }
+        .structural-notes ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+        .structural-notes li {
+            font-size: 13px; color: var(--gray-text);
+            padding-left: 16px; position: relative; line-height: 1.6;
+        }
+        .structural-notes li::before { content: '—'; position: absolute; left: 0; color: var(--muted); }
+        .structural-notes li strong { color: var(--dark); }
+
+        /* ── COLLAPSIBLE ── */
+        details {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 8px; margin-bottom: 10px; overflow: hidden;
+        }
+        details summary {
+            padding: 13px 18px; font-size: 13px; font-weight: 600; color: var(--dark);
+            cursor: pointer; user-select: none; list-style: none;
+            display: flex; align-items: center; gap: 10px;
+        }
+        details summary::-webkit-details-marker { display: none; }
+        details summary::before {
+            content: '▶'; font-size: 9px; color: var(--muted);
+            transition: transform 0.2s; flex-shrink: 0;
+        }
+        details[open] summary::before { transform: rotate(90deg); }
+        .summary-counts { margin-left: auto; display: flex; gap: 8px; }
+        .count-badge { font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 10px; }
+        .count-ok   { background: #e6faf3; color: #1a9e6e; }
+        .count-gap  { background: #fff1ed; color: #c94f2a; }
+        .count-q    { background: #f0f1f9; color: var(--muted); }
+
+        /* ── AUDIT TABLES ── */
+        .table-wrap { overflow-x: auto; border-top: 1px solid var(--border); }
+        table { width: 100%; border-collapse: collapse; font-size: 12px; }
+        th {
+            background: #f8f8fc; padding: 9px 14px; text-align: left;
+            font-size: 10px; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.6px; color: var(--muted); border-bottom: 1px solid var(--border);
+            white-space: nowrap;
+        }
+        td {
+            padding: 9px 14px; border-bottom: 1px solid var(--border);
+            vertical-align: top; color: var(--gray-text); line-height: 1.5;
+        }
+        tr:last-child td { border-bottom: none; }
+        td:first-child { font-weight: 500; color: var(--dark); white-space: nowrap; }
+        a.q-ref {
+            display: inline-block; font-size: 10px; font-weight: 700;
+            background: #e6faf3; color: #1a9e6e; padding: 1px 6px;
+            border-radius: 10px; text-decoration: none;
+            border: 1px solid #b2edd0; white-space: nowrap; cursor: pointer;
+        }
+        a.q-ref:hover { background: #d0f5e8; }
+        .status-ok   { color: #1a9e6e; font-weight: 600; }
+        .status-gap  { color: #c94f2a; font-weight: 600; }
+        .status-part { color: #b07d10; font-weight: 600; }
+        .status-q    { color: var(--muted); }
+        .status-bug  { color: #c42e6b; }
+        td em { font-style: normal; color: var(--muted); font-size: 11px; }
+        .audit-legend {
+            display: flex; gap: 16px; flex-wrap: wrap;
+            margin-bottom: 20px; font-size: 11px; color: var(--muted);
+        }
+        .audit-legend span { display: flex; align-items: center; gap: 5px; }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1>Hungry Marketplace — Product Call Questions</h1>
+    <div class="header-meta">13 questions · Based on current-state-audit.md</div>
+    <div class="tab-bar">
+        <button class="tab-btn active" id="btn-questions" onclick="switchTab('questions')">Questions</button>
+        <button class="tab-btn" id="btn-audit" onclick="switchTab('audit')">Full Audit Reference</button>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     QUESTIONS TAB
+══════════════════════════════════════════════ -->
+<div id="tab-questions" class="tab-panel active">
+<div class="main">
+
+    <div class="legend">
+        <div class="legend-item"><div class="legend-dot" style="background:#3fd696"></div> UI — drives design / wireframe changes</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#ff866a"></div> Functionality — drives engineering work</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#fe6d9b"></div> Both — drives both</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#b0afc8"></div> Scope TBD — keep current or change needed</div>
+    </div>
+
+    <!-- ── FOUNDATIONAL ── -->
+    <div class="section-block">
+        <div class="section-heading"><h2>Foundational Decision</h2></div>
+        <div class="q-card foundational" id="qcard_1">
+            <div class="q-top">
+                <div class="q-meta"><span class="q-num">Q1</span><span class="q-audit-ref">audit ref #14</span><span class="tag tag-both">Both</span></div>
+                <div class="q-text">Headcount ordering model — keep headcount-driven or move to item-quantity for Individual Meals?</div>
+                <div class="q-context">Currently all items — platters and individual — are ordered by headcount (price × number of people). HH MP v2 uses item-quantity for Individual Meals (how many of this item, not how many people). <strong>This decision gates the serving style tab build, the item modal redesign, the cart behaviour, and whether "Add Headcount" stays in the nav or is removed.</strong></div>
+            </div>
+            <div class="q-notes">
+                <div class="notes-label">Notes <span class="saved-flash" id="sf_1">Saved</span></div>
+                <textarea class="note-input" id="note_1" placeholder="Decision + reasoning…" oninput="save('1', this.value)"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── DIRECTORY ── -->
+    <div class="section-block">
+        <div class="section-heading"><h2>Directory</h2></div>
+
+        <div class="q-card" id="qcard_2">
+            <div class="q-top">
+                <div class="q-meta"><span class="q-num">Q2</span><span class="q-audit-ref">audit ref #1</span><span class="tag tag-tbd">Scope TBD</span></div>
+                <div class="q-text">Keep Hungry's marketing nav or replace with a marketplace-specific nav?</div>
+                <div class="q-context">A full marketing nav (HOME, MENUS BY CITY…) sits above the marketplace nav today. HH MP v2 has no marketing nav — just marketplace navigation.</div>
+            </div>
+            <div class="radio-decision">
+                <label class="radio-option opt-keep"><input type="radio" name="rd_2" value="keep" onchange="saveRadio('2','keep')"> Keep HUNGRY current</label>
+                <label class="radio-option opt-change"><input type="radio" name="rd_2" value="change" onchange="saveRadio('2','change')"> Change needed</label>
+            </div>
+            <div class="q-notes">
+                <div class="notes-label">Notes <span class="saved-flash" id="sf_2">Saved</span></div>
+                <textarea class="note-input" id="note_2" placeholder="Reasoning…" oninput="save('2', this.value)"></textarea>
+            </div>
+        </div>
+
+        <div class="q-card" id="qcard_3">
+            <div class="q-top">
+                <div class="q-meta"><span class="q-num">Q3</span><span class="q-audit-ref">audit ref #2</span><span class="tag tag-tbd">Scope TBD</span></div>
+                <div class="q-text">Browse by Chef/Restaurant tab — keep or fold into the standard directory + restaurant page flow?</div>
+                <div class="q-context">A separate tab lets customers browse by chef and see all their menus. HH MP v2 doesn't have this tab — the restaurant page serves that purpose.</div>
+            </div>
+            <div class="radio-decision">
+                <label class="radio-option opt-keep"><input type="radio" name="rd_3" value="keep" onchange="saveRadio('3','keep')"> Keep HUNGRY current</label>
+                <label class="radio-option opt-change"><input type="radio" name="rd_3" value="change" onchange="saveRadio('3','change')"> Change needed</label>
+            </div>
+            <div class="q-notes">
+                <div class="notes-label">Notes <span class="saved-flash" id="sf_3">Saved</span></div>
+                <textarea class="note-input" id="note_3" placeholder="Reasoning…" oninput="save('3', this.value)"></textarea>
+            </div>
+        </div>
+
+        <div class="q-card" id="qcard_4">
+            <div class="q-top">
+                <div class="q-meta"><span class="q-num">Q4</span><span class="q-audit-ref">audit ref #3 &amp; #4</span><span class="tag tag-tbd">Scope TBD</span></div>
+                <div class="q-text">Avg. price per person and star ratings on cards — keep or drop?</div>
+                <div class="q-context">Both shown on current directory cards. Neither is in HH MP v2. Can be decided together.</div>
+            </div>
+            <div class="radio-decision">
+                <label class="radio-option opt-keep"><input type="radio" name="rd_4" value="keep" onchange="saveRadio('4','keep')"> Keep HUNGRY current</label>
+                <label class="radio-option opt-change"><input type="radio" name="rd_4" value="change" onchange="saveRadio('4','change')"> Change needed</label>
+            </div>
+            <div class="q-notes">
+                <div class="notes-label">Notes <span class="saved-flash" id="sf_4">Saved</span></div>
+                <textarea class="note-input" id="note_4" placeholder="Keep both / drop both / keep one…" oninput="save('4', this.value)"></textarea>
+            </div>
+        </div>
+
+        <div class="q-card" id="qcard_5">
+            <div class="q-top">
+                <div class="q-meta"><span class="q-num">Q5</span><span class="q-audit-ref">audit ref #5 &amp; #6</span><span class="tag tag-both">Both</span></div>
+                <div class="q-text">Tags &amp; badge alignment — define the full tag set for Hungry across all surfaces</div>
+                <div class="q-context">Two parts to align:<br><strong>(1) Badges</strong> — current: "Limited Edition", "James Beard Nominee". HH MP v2: "featured", "exclusive", "New", "crowd pleaser". Need to define Hungry's badge set.<br><strong>(2) Tags</strong> — cuisine, dietary, packaging, and featured tags need to be defined for directory cards, restaurant page header, and item cards.</div>
+            </div>
+            <div class="q-notes">
+                <div class="notes-label">Notes <span class="saved-flash" id="sf_5">Saved</span></div>
+                <textarea class="note-input" id="note_5" placeholder="Badge set decisions, tag set decisions…" oninput="save('5', this.value)"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── RESTAURANT PAGE ── -->
+    <div class="section-block">
+        <div class="section-heading"><h2>Restaurant Page</h2></div>
+
+        <div class="q-card" id="qcard_6">
+            <div class="q-top">
+                <div class="q-meta"><span class="q-num">Q6</span><span class="q-audit-ref">audit ref #8</span><span class="tag tag-ui">UI</span></div>
+                <div class="q-text">Chef bio vs tagline — keep bio, replace with tagline, or show both?</div>
+                <div class="q-context">Currently a long paragraph bio with a "Hide Bio" toggle. HH MP v2 shows a short catering tagline only. Either direction drives a header redesign.</div>
+            </div>
+            <div class="q-notes">
+                <div class="notes-label">Notes <span class="saved-flash" id="sf_6">Saved</span></div>
+                <textarea class="note-input" id="note_6" placeholder="Keep bio / tagline only / both…" oninput="save('6', this.value)"></textarea>
+            </div>
+        </div>
+
+        <div class="q-card" id="qcard_7">
+            <div class="q-top">
+                <div class="q-meta"><span class="q-num">Q7</span><span class="q-audit-ref">audit ref #9</span><span class="tag tag-tbd">Scope TBD</span></div>
+                <div class="q-text">Restaurant address on the restaurant page — show now or hold until pickup is live?</div>
+                <div class="q-context">Address data already exists at chef level in the system. HH MP v2 shows it below the banner. Showing it implies pickup is available — needs a call on pickup rollout timing.</div>
+            </div>
+            <div class="radio-decision">
+                <label class="radio-option opt-keep"><input type="radio" name="rd_7" value="keep" onchange="saveRadio('7','keep')"> Keep HUNGRY current</label>
+                <label class="radio-option opt-change"><input type="radio" name="rd_7" value="change" onchange="saveRadio('7','change')"> Change needed</label>
+            </div>
+            <div class="q-notes">
+                <div class="notes-label">Notes <span class="saved-flash" id="sf_7">Saved</span></div>
+                <textarea class="note-input" id="note_7" placeholder="Show now / hold for pickup / reasoning…" oninput="save('7', this.value)"></textarea>
+            </div>
+        </div>
+
+        <div class="q-card" id="qcard_8">
+            <div class="q-top">
+                <div class="q-meta"><span class="q-num">Q8</span><span class="q-audit-ref">audit ref #10</span><span class="tag tag-both">Both</span></div>
+                <div class="q-text">Restaurant info panel — what to include in v1?</div>
+                <div class="q-context">HH MP v2 has a side panel with map, address, and hours. A gallery has been flagged as especially valuable for catering and event chefs. Scope for v1 TBD.</div>
+            </div>
+            <div class="q-notes">
+                <div class="notes-label">Notes <span class="saved-flash" id="sf_8">Saved</span></div>
+                <textarea class="note-input" id="note_8" placeholder="v1 scope: map + address + hours / + gallery / other…" oninput="save('8', this.value)"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── CART ── -->
+    <div class="section-block">
+        <div class="section-heading"><h2>Cart</h2></div>
+
+        <div class="q-card" id="qcard_9">
+            <div class="q-top">
+                <div class="q-meta"><span class="q-num">Q9</span><span class="q-audit-ref">audit ref #11</span><span class="tag tag-both">Both</span></div>
+                <div class="q-text">Dietary Restrictions / Chef Notes — keep at order level, move to item level, or both?</div>
+                <div class="q-context">Currently a single text area at order level. HH MP v2 has special instructions per item in the item drawer. Moving to item level changes both the cart UI and the order data model.</div>
+            </div>
+            <div class="q-notes">
+                <div class="notes-label">Notes <span class="saved-flash" id="sf_9">Saved</span></div>
+                <textarea class="note-input" id="note_9" placeholder="Order level / item level / both…" oninput="save('9', this.value)"></textarea>
+            </div>
+        </div>
+
+        <div class="q-card" id="qcard_10">
+            <div class="q-top">
+                <div class="q-meta"><span class="q-num">Q10</span><span class="q-audit-ref">audit ref #12 &amp; #13</span><span class="tag tag-tbd">Scope TBD</span></div>
+                <div class="q-text">Promo code and gratuity selector — carry both forward?</div>
+                <div class="q-context">Both exist in the current cart. Neither is in HH MP v2. Can be decided together.</div>
+            </div>
+            <div class="radio-decision">
+                <label class="radio-option opt-keep"><input type="radio" name="rd_10" value="keep" onchange="saveRadio('10','keep')"> Keep HUNGRY current</label>
+                <label class="radio-option opt-change"><input type="radio" name="rd_10" value="change" onchange="saveRadio('10','change')"> Change needed</label>
+            </div>
+            <div class="q-notes">
+                <div class="notes-label">Notes <span class="saved-flash" id="sf_10">Saved</span></div>
+                <textarea class="note-input" id="note_10" placeholder="Keep both / drop both / keep one…" oninput="save('10', this.value)"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── CHECKOUT ── -->
+    <div class="section-block">
+        <div class="section-heading"><h2>Checkout</h2></div>
+
+        <div class="q-card" id="qcard_11">
+            <div class="q-top">
+                <div class="q-meta"><span class="q-num">Q11</span><span class="q-audit-ref">audit ref #15</span><span class="tag tag-functionality">Functionality</span></div>
+                <div class="q-text">Event date post-checkout editing — keep current low-friction approach or lock date at checkout?</div>
+                <div class="q-context">Currently customers can "make a best guess and edit after checkout." HH MP v2 requires date confirmed before checkout. Note: once lead time enforcement is built, post-checkout editing may conflict with it.</div>
+            </div>
+            <div class="q-notes">
+                <div class="notes-label">Notes <span class="saved-flash" id="sf_11">Saved</span></div>
+                <textarea class="note-input" id="note_11" placeholder="Lock at checkout / keep editable / under what conditions…" oninput="save('11', this.value)"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── MARKETPLACE ── -->
+    <div class="section-block">
+        <div class="section-heading"><h2>Marketplace</h2></div>
+
+        <div class="q-card" id="qcard_12">
+            <div class="q-top">
+                <div class="q-meta"><span class="q-num">Q12</span><span class="q-audit-ref">audit ref #17</span><span class="tag tag-both">Both</span></div>
+                <div class="q-text">Marketplace entry point — dedicated homepage or continue through the marketing site?</div>
+                <div class="q-context">Currently the marketplace is accessed via the marketing site nav. A dedicated marketplace URL/homepage could improve discoverability and cleanly separate marketing from transactional surfaces.</div>
+            </div>
+            <div class="q-notes">
+                <div class="notes-label">Notes <span class="saved-flash" id="sf_12">Saved</span></div>
+                <textarea class="note-input" id="note_12" placeholder="Dedicated homepage / stay in marketing site / timing…" oninput="save('12', this.value)"></textarea>
+            </div>
+        </div>
+
+        <div class="q-card" id="qcard_13">
+            <div class="q-top">
+                <div class="q-meta"><span class="q-num">Q13</span><span class="tag tag-both">Both</span></div>
+                <div class="q-text">Marketplace user dashboard — what to include in v1?</div>
+                <div class="q-context">
+                    <strong>Confirmed:</strong> Guest checkout is kept. After placing an order as a guest, the user is prompted to create a password. Once created, they land on the marketplace user dashboard.<br><br>
+                    <strong>Open:</strong> What does the dashboard include in v1? Confirm the features below.
+                </div>
+            </div>
+            <div class="dash-list">
+                <div class="dash-list-label">Confirm for v1</div>
+                <div class="dash-items">
+                    <label class="dash-item"><input type="checkbox" id="dc_1" onchange="saveCheck('dc_1', this.checked)"> Order history</label>
+                    <label class="dash-item"><input type="checkbox" id="dc_2" onchange="saveCheck('dc_2', this.checked)"> Upcoming orders</label>
+                    <label class="dash-item"><input type="checkbox" id="dc_3" onchange="saveCheck('dc_3', this.checked)"> Billing &amp; invoices (downloadable)</label>
+                    <label class="dash-item"><input type="checkbox" id="dc_4" onchange="saveCheck('dc_4', this.checked)"> Saved delivery addresses</label>
+                    <label class="dash-item"><input type="checkbox" id="dc_5" onchange="saveCheck('dc_5', this.checked)"> Payment methods</label>
+                    <label class="dash-item"><input type="checkbox" id="dc_6" onchange="saveCheck('dc_6', this.checked)"> Account / profile settings</label>
+                    <label class="dash-item"><input type="checkbox" id="dc_7" onchange="saveCheck('dc_7', this.checked)"> Reorder from past orders</label>
+                </div>
+            </div>
+            <div class="q-notes">
+                <div class="notes-label">Additional notes <span class="saved-flash" id="sf_13">Saved</span></div>
+                <textarea class="note-input" id="note_13" placeholder="Any other features, priorities, or v2 items to note…" oninput="save('13', this.value)"></textarea>
+            </div>
+        </div>
+    </div>
+
+</div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     AUDIT REFERENCE TAB
+══════════════════════════════════════════════ -->
+<div id="tab-audit" class="tab-panel">
+<div class="main">
+
+    <div class="structural-notes">
+        <h3>Key Structural Notes</h3>
+        <ul>
+            <li><strong>Current marketplace is menu-centric, not restaurant-centric.</strong> Each menu is its own page. A chef can have multiple menus, each with its own page and its own separate order. HH MP v2 is one restaurant page showing all serving styles together.</li>
+            <li><strong>Mixed-format ordering does not exist.</strong> A customer cannot currently order platters and individual items in the same order. This is a core feature of HH MP v2.</li>
+            <li><strong>Both menu types use the same headcount ordering model.</strong> Large-format and individually packaged menus both price by number of people (e.g. "$15/person, minimum 8 people"). HH MP v2 requires item-quantity ordering for Individual Meals.</li>
+            <li><strong>Individually packaged menus</strong> are a separate directory category today but are not a structurally different ordering experience — same page layout, same modal, same cart behaviour.</li>
+            <li><strong>Hungry has several business features HH MP v2 does not account for</strong> — these should carry forward, not be treated as gaps: SELECT ACCOUNT (corporate billing), Point of Access, Security Check-In, Pay Later (ACH/Check/NET), pre-authorisation model, gratuity selector, weekday rate.</li>
+        </ul>
+    </div>
+
+    <div class="audit-legend">
+        <span>✅ Aligned</span>
+        <span>✗ Gap — needs to be built</span>
+        <span>〜 Partial / data gap</span>
+        <span>❓ Open question</span>
+        <span>🐛 Bug</span>
+        <span><a class="q-ref" href="javascript:void(0)">Q#</a> Links to question</span>
+    </div>
+
+    <details>
+        <summary>Directory — Nav Bar<span class="summary-counts"><span class="count-badge count-ok">5 ✅</span><span class="count-badge count-q">1 ❓</span></span></summary>
+        <div class="table-wrap"><table>
+            <tr><th>Element</th><th>Current</th><th>HH MP v2</th><th>Status</th></tr>
+            <tr><td>Logo</td><td>✅ Exists</td><td>✅</td><td><span class="status-ok">✅</span></td></tr>
+            <tr><td>Address input</td><td>✅ Browse with address only, no date/time required</td><td>✅</td><td><span class="status-ok">✅</span></td></tr>
+            <tr><td>Date/Time</td><td>✅ Optional</td><td>✅ Optional</td><td><span class="status-ok">✅</span></td></tr>
+            <tr><td>Search</td><td>✅ By chef/restaurant, dish, ingredient</td><td>✅</td><td><span class="status-ok">✅</span></td></tr>
+            <tr><td>Login / Account</td><td>✅ Exists</td><td>✅</td><td><span class="status-ok">✅</span></td></tr>
+            <tr><td>Marketing nav</td><td>Exists above marketplace nav (HOME, MENUS BY CITY…)</td><td>Not in HH MP v2</td><td><span class="status-q">❓</span> <a class="q-ref" href="javascript:goToQuestion(2)">Q2</a></td></tr>
+        </table></div>
+    </details>
+
+    <details>
+        <summary>Directory — Filter Bar<span class="summary-counts"><span class="count-badge count-ok">3 ✅</span><span class="count-badge count-gap">2 ✗</span><span class="count-badge count-q">1 ❓</span></span></summary>
+        <div class="table-wrap"><table>
+            <tr><th>Element</th><th>Current</th><th>HH MP v2</th><th>Status</th></tr>
+            <tr><td>Cuisine filter</td><td>✅ Cuisine image tiles, filters results</td><td>✅</td><td><span class="status-ok">✅</span></td></tr>
+            <tr><td>Dietary preferences</td><td>✅ Dropdown</td><td>✅</td><td><span class="status-ok">✅</span></td></tr>
+            <tr><td>Sort By</td><td>✅ Dropdown</td><td>✅</td><td><span class="status-ok">✅</span></td></tr>
+            <tr><td>Serving style filter</td><td>✗</td><td>✅ Primary first-level filter</td><td><span class="status-gap">✗</span></td></tr>
+            <tr><td>Result count</td><td>✗</td><td>✅ Shown in filter bar</td><td><span class="status-gap">✗</span></td></tr>
+            <tr><td>Browse by Chef/Restaurant tab</td><td>Exists — shows chef profile + all their menus</td><td>Not in HH MP v2</td><td><span class="status-q">❓</span> <a class="q-ref" href="javascript:goToQuestion(3)">Q3</a></td></tr>
+        </table></div>
+    </details>
+
+    <details>
+        <summary>Directory — Page Structure<span class="summary-counts"><span class="count-badge count-gap">3 ✗</span></span></summary>
+        <div class="table-wrap"><table>
+            <tr><th>Element</th><th>Current</th><th>HH MP v2</th><th>Status</th></tr>
+            <tr><td>Page organisation</td><td>Curated editorial sections (Limited Edition, Individually Packaged Meals, Top Picks) — horizontal scroll rows</td><td>Flat grid sorted by Featured by default</td><td><span class="status-gap">✗</span></td></tr>
+            <tr><td>What a card represents</td><td>One menu — a chef can have multiple cards on the same directory page</td><td>One restaurant — one card, all serving styles inside</td><td><span class="status-gap">✗</span></td></tr>
+            <tr><td>Results per load</td><td>A few per section + "see all options" carousel</td><td>Up to 12 per load, then "Load More"</td><td><span class="status-gap">✗</span></td></tr>
+        </table></div>
+    </details>
+
+    <details>
+        <summary>Directory — Restaurant Cards<span class="summary-counts"><span class="count-badge count-ok">2 ✅</span><span class="count-badge count-gap">4 ✗</span><span class="count-badge count-q">4 ❓</span></span></summary>
+        <div class="table-wrap"><table>
+            <tr><th>Element</th><th>Current</th><th>HH MP v2</th><th>Status</th></tr>
+            <tr><td>Menu/restaurant image</td><td>✅</td><td>✅</td><td><span class="status-ok">✅</span></td></tr>
+            <tr><td>Name</td><td>✅</td><td>✅</td><td><span class="status-ok">✅</span></td></tr>
+            <tr><td>Featured badges</td><td>"Limited Edition", "James Beard Nominee"</td><td>"featured", "exclusive", "New", "crowd pleaser"</td><td><span class="status-q">❓</span> <a class="q-ref" href="javascript:goToQuestion(5)">Q5</a></td></tr>
+            <tr><td>Short catering tagline</td><td>✗</td><td>✅</td><td><span class="status-gap">✗</span></td></tr>
+            <tr><td>Serving style indicators</td><td>✗</td><td>✅ Platters / IM icons on card</td><td><span class="status-gap">✗</span></td></tr>
+            <tr><td>Cuisine tags</td><td>✗</td><td>✅ First 3, then "+ More"</td><td><span class="status-q">❓</span> <a class="q-ref" href="javascript:goToQuestion(5)">Q5</a></td></tr>
+            <tr><td>Dietary tags</td><td>✗</td><td>✅ Up to 6</td><td><span class="status-q">❓</span> <a class="q-ref" href="javascript:goToQuestion(5)">Q5</a></td></tr>
+            <tr><td>Minimum order</td><td>✗</td><td>✅</td><td><span class="status-gap">✗</span></td></tr>
+            <tr><td>Avg. price per person</td><td>✅ Shows currently</td><td>Not in HH MP v2</td><td><span class="status-q">❓</span> <a class="q-ref" href="javascript:goToQuestion(4)">Q4</a></td></tr>
+            <tr><td>Star rating</td><td>✅ Shows currently</td><td>Not in HH MP v2</td><td><span class="status-q">❓</span> <a class="q-ref" href="javascript:goToQuestion(4)">Q4</a></td></tr>
+        </table></div>
+    </details>
+
+    <details>
+        <summary>Directory — Card Hover State<span class="summary-counts"><span class="count-badge count-gap">1 ✗</span></span></summary>
+        <div class="table-wrap"><table>
+            <tr><th>Element</th><th>Current</th><th>HH MP v2</th><th>Status</th></tr>
+            <tr><td>What shows on hover</td><td>Menu item preview — category name + list of items</td><td>Full restaurant info side panel — location, hours, next available date, minimum order, lead time, "Go to Restaurant Page" CTA</td><td><span class="status-gap">✗</span> Different concept entirely</td></tr>
+        </table></div>
+    </details>
+
+    <details>
+        <summary>Restaurant Page — Nav Bar<span class="summary-counts"><span class="count-badge count-ok">3 ✅</span><span class="count-badge count-gap">1 ✗</span><span class="count-badge count-q">1 ❓</span></span></summary>
+        <div class="table-wrap"><table>
+            <tr><th>Element</th><th>Current</th><th>HH MP v2</th><th>Status</th></tr>
+            <tr><td>Address</td><td>Carried from directory — no date/time needed to browse</td><td>✅</td><td><span class="status-ok">✅</span></td></tr>
+            <tr><td>Date/Time</td><td>✅ Optional, not required to browse</td><td>✅</td><td><span class="status-ok">✅</span></td></tr>
+            <tr><td>Delivery / Pickup toggle</td><td>✗</td><td>✅</td><td><span class="status-gap">✗</span></td></tr>
+            <tr><td>Login / Account</td><td>✅ In marketing top nav</td><td>✅</td><td><span class="status-ok">✅</span></td></tr>
+            <tr><td>Headcount</td><td>"Add Headcount" shown in sub-nav</td><td>Not in HH MP v2</td><td><span class="status-q">❓</span> <a class="q-ref" href="javascript:goToQuestion(1)">Q1</a></td></tr>
+        </table></div>
+    </details>
+
+    <details>
+        <summary>Restaurant Page — Header<span class="summary-counts"><span class="count-badge count-ok">2 ✅</span><span class="count-badge count-gap">2 ✗</span><span class="count-badge count-q">5 ❓</span></span></summary>
+        <div class="table-wrap"><table>
+            <tr><th>Element</th><th>Current</th><th>HH MP v2</th><th>Status</th></tr>
+            <tr><td>Banner image</td><td>Upload capability exists; not all restaurants have uploaded one</td><td>✅ Always full-width</td><td><span class="status-part">〜</span> Data gap. Two states needed: with banner + fallback</td></tr>
+            <tr><td>Chef headshot</td><td>✅ Exists at chef account level — shared across all menus</td><td>Not in HH MP v2</td><td><span class="status-gap">✗</span> Design to-do: add headshot to restaurant header wireframes (both states)</td></tr>
+            <tr><td>Restaurant/menu name</td><td>✅</td><td>✅</td><td><span class="status-ok">✅</span></td></tr>
+            <tr><td>Chef bio</td><td>Long paragraph + "Hide Bio" toggle</td><td>Short catering tagline only</td><td><span class="status-q">❓</span> <a class="q-ref" href="javascript:goToQuestion(6)">Q6</a></td></tr>
+            <tr><td>Cuisine tags</td><td>✗</td><td>✅</td><td><span class="status-q">❓</span> <a class="q-ref" href="javascript:goToQuestion(5)">Q5</a></td></tr>
+            <tr><td>Dietary tags</td><td>✗</td><td>✅</td><td><span class="status-q">❓</span> <a class="q-ref" href="javascript:goToQuestion(5)">Q5</a></td></tr>
+            <tr><td>Feature badges</td><td>✗</td><td>✅</td><td><span class="status-q">❓</span> <a class="q-ref" href="javascript:goToQuestion(5)">Q5</a></td></tr>
+            <tr><td>Restaurant address</td><td>✗ (data exists at chef level)</td><td>✅ Below banner</td><td><span class="status-q">❓</span> <a class="q-ref" href="javascript:goToQuestion(7)">Q7</a></td></tr>
+            <tr><td>"Other Restaurant Info" button</td><td>✗</td><td>✅ Opens side panel (map, hours, address)</td><td><span class="status-gap">✗</span> <a class="q-ref" href="javascript:goToQuestion(8)">Q8</a> Scope TBD for v1</td></tr>
+        </table></div>
+    </details>
+
+    <details>
+        <summary>Restaurant Page — Menu Structure<span class="summary-counts"><span class="count-badge count-ok">2 ✅</span><span class="count-badge count-gap">3 ✗</span></span></summary>
+        <div class="table-wrap"><table>
+            <tr><th>Element</th><th>Current</th><th>HH MP v2</th><th>Status</th></tr>
+            <tr><td>Page concept</td><td>One page per menu — each menu is its own ordering page</td><td>One restaurant page showing all serving styles together</td><td><span class="status-gap">✗</span> Fundamental structural gap</td></tr>
+            <tr><td>Mixed-format ordering</td><td>✗ Not possible — separate pages, separate orders</td><td>✅ Core feature</td><td><span class="status-gap">✗</span> Major gap — <a class="q-ref" href="javascript:goToQuestion(1)">Q1</a></td></tr>
+            <tr><td>Serving style tabs</td><td>✗ Data exists (Market Type: Office/Group Order) but Concept constraint prevents mixed-format orders</td><td>✅ Primary navigation on restaurant page</td><td><span class="status-gap">✗</span> Requires MenuItemOffering refactor — <a class="q-ref" href="javascript:goToQuestion(1)">Q1</a></td></tr>
+            <tr><td>Category tabs</td><td>✅ "Entrees" / "Sides" flat tabs</td><td>✅ Scrollable bar within each serving style</td><td><span class="status-part">〜</span></td></tr>
+            <tr><td>Dietary Preferences filter</td><td>✅ Button exists</td><td>✅</td><td><span class="status-ok">✅</span></td></tr>
+        </table></div>
+    </details>
+
+    <details>
+        <summary>Restaurant Page — Item Cards<span class="summary-counts"><span class="count-badge count-ok">4 ✅</span><span class="count-badge count-gap">3 ✗</span><span class="count-badge count-q">1 〜</span></span></summary>
+        <div class="table-wrap"><table>
+            <tr><th>Element</th><th>Current</th><th>HH MP v2</th><th>Status</th></tr>
+            <tr><td>Item name</td><td>✅</td><td>✅</td><td><span class="status-ok">✅</span></td></tr>
+            <tr><td>Price/person</td><td>✅</td><td>✅</td><td><span class="status-ok">✅</span></td></tr>
+            <tr><td>Description</td><td>✅</td><td>✅</td><td><span class="status-ok">✅</span></td></tr>
+            <tr><td>Dietary / allergen tags</td><td>✅ e.g. "contains gluten &amp; dairy", "vegan"</td><td>✅</td><td><span class="status-ok">✅</span></td></tr>
+            <tr><td>Item image</td><td>✗</td><td>✅</td><td><span class="status-part">〜</span> Data gap confirmed — upload capability exists, most items not populated yet</td></tr>
+            <tr><td>"+" button to open item drawer</td><td>✗</td><td>✅</td><td><span class="status-gap">✗</span></td></tr>
+            <tr><td>Serving size ("Serves X")</td><td>✗</td><td>✅ On platter cards</td><td><span class="status-gap">✗</span></td></tr>
+            <tr><td>Different layouts per serving style</td><td>✗ No distinction</td><td>✅ Platters = full-width list, IM = 2-col grid</td><td><span class="status-gap">✗</span></td></tr>
+        </table></div>
+    </details>
+
+    <details>
+        <summary>Item Modal / Drawer<span class="summary-counts"><span class="count-badge count-ok">6 ✅</span><span class="count-badge count-gap">6 ✗</span><span class="count-badge count-q">1 ❓</span></span></summary>
+        <div class="table-wrap"><table>
+            <tr><th>Element</th><th>Current</th><th>HH MP v2</th><th>Status</th></tr>
+            <tr><td>Pattern</td><td>Centre overlay modal</td><td>Right side drawer</td><td><em>UI difference</em></td></tr>
+            <tr><td>Item name</td><td>✅</td><td>✅</td><td><span class="status-ok">✅</span></td></tr>
+            <tr><td>Price</td><td>✅</td><td>✅</td><td><span class="status-ok">✅</span></td></tr>
+            <tr><td>Description</td><td>✅</td><td>✅</td><td><span class="status-ok">✅</span></td></tr>
+            <tr><td>Dietary / allergen tags</td><td>✅</td><td>✅</td><td><span class="status-ok">✅</span></td></tr>
+            <tr><td>Live price update</td><td>✅</td><td>✅</td><td><span class="status-ok">✅</span></td></tr>
+            <tr><td>Add to cart CTA</td><td>✅</td><td>✅</td><td><span class="status-ok">✅</span></td></tr>
+            <tr><td>Quantity selector</td><td>Headcount-driven ("X people")</td><td>Item-quantity-driven (how many of this item)</td><td><span class="status-gap">✗</span> <a class="q-ref" href="javascript:goToQuestion(1)">Q1</a></td></tr>
+            <tr><td>Minimum per item</td><td>Shows "minimum X people" inline</td><td>Not shown in modal</td><td><span class="status-q">❓</span></td></tr>
+            <tr><td>Item image</td><td>✗</td><td>✅</td><td><span class="status-gap">✗</span></td></tr>
+            <tr><td>Serving size</td><td>✗</td><td>✅</td><td><span class="status-gap">✗</span></td></tr>
+            <tr><td>Option groups / modifications</td><td>✗</td><td>✅ Required + optional groups, modifier options</td><td><span class="status-gap">✗</span> Confirmed gap — needs to be built</td></tr>
+            <tr><td>Item label</td><td>✗</td><td>✅</td><td><span class="status-gap">✗</span></td></tr>
+            <tr><td>Special instructions</td><td>✗</td><td>✅</td><td><span class="status-gap">✗</span></td></tr>
+            <tr><td>🐛 Bug</td><td>Catering menu auto-jumps to minimum headcount on first "+" click. Individually packaged starts at 1 and only blocks at checkout. Inconsistent.</td><td>—</td><td><span class="status-bug">🐛</span> Needs fix</td></tr>
+        </table></div>
+    </details>
+
+    <details>
+        <summary>Cart<span class="summary-counts"><span class="count-badge count-ok">6 ✅</span><span class="count-badge count-gap">5 ✗</span><span class="count-badge count-q">5 ❓</span></span></summary>
+        <div class="table-wrap"><table>
+            <tr><th>Element</th><th>Current</th><th>HH MP v2</th><th>Status</th></tr>
+            <tr><td>Items listed</td><td>✅ Name, price/person, quantity controls, item total</td><td>✅</td><td><span class="status-ok">✅</span></td></tr>
+            <tr><td>Subtotal</td><td>✅</td><td>✅</td><td><span class="status-ok">✅</span></td></tr>
+            <tr><td>Delivery &amp; Service Fee</td><td>✅</td><td>✅</td><td><span class="status-ok">✅</span></td></tr>
+            <tr><td>Sales Tax</td><td>✅</td><td>✅</td><td><span class="status-ok">✅</span></td></tr>
+            <tr><td>Total</td><td>✅</td><td>✅</td><td><span class="status-ok">✅</span></td></tr>
+            <tr><td>Minimum order enforcement</td><td>✅ Button disabled + message below minimum</td><td>✅</td><td><span class="status-ok">✅</span></td></tr>
+            <tr><td>Edit item</td><td>✗ Quantity change + delete only</td><td>✅ Edit button reopens item drawer pre-filled</td><td><span class="status-gap">✗</span></td></tr>
+            <tr><td>Remove confirmation modal</td><td>✗</td><td>✅</td><td><span class="status-gap">✗</span></td></tr>
+            <tr><td>Grouped by serving style</td><td>✗ Flat list</td><td>✅ Grouped with serving style name + item count</td><td><span class="status-gap">✗</span></td></tr>
+            <tr><td>Delivery details accordion</td><td>✗</td><td>✅ Address + date/time, expandable, editable</td><td><span class="status-gap">✗</span></td></tr>
+            <tr><td>Group order panel</td><td>✗</td><td>✅ Above cart</td><td><span class="status-gap">✗</span></td></tr>
+            <tr><td>Dietary Restrictions / Chef Notes</td><td>✅ Order-level text area</td><td>Special instructions at item level</td><td><span class="status-q">❓</span> <a class="q-ref" href="javascript:goToQuestion(9)">Q9</a></td></tr>
+            <tr><td>Promo code</td><td>✅ Exists</td><td>Not in HH MP v2</td><td><span class="status-q">❓</span> <a class="q-ref" href="javascript:goToQuestion(10)">Q10</a></td></tr>
+            <tr><td>Gratuity selector (5% / 10% / 15%)</td><td>✅ Exists</td><td>Not in HH MP v2</td><td><span class="status-q">❓</span> <a class="q-ref" href="javascript:goToQuestion(10)">Q10</a></td></tr>
+            <tr><td>Checkout gate</td><td>Requires delivery date + headcount</td><td>Date only (headcount tied to ordering model)</td><td><span class="status-q">❓</span> <a class="q-ref" href="javascript:goToQuestion(1)">Q1</a></td></tr>
+            <tr><td>Price per head / headcount display</td><td>✅ Shows in cart</td><td>Not in HH MP v2</td><td><span class="status-q">❓</span> <a class="q-ref" href="javascript:goToQuestion(1)">Q1</a></td></tr>
+            <tr><td>Utensils prompt</td><td>✗</td><td>✅ When no utensils added</td><td><span class="status-gap">✗</span></td></tr>
+        </table></div>
+    </details>
+
+    <details>
+        <summary>Checkout<span class="summary-counts"><span class="count-badge count-ok">9 ✅</span><span class="count-badge count-gap">3 ✗</span><span class="count-badge count-q">9 ❓</span></span></summary>
+        <div class="table-wrap"><table>
+            <tr><th>Element</th><th>Current</th><th>HH MP v2</th><th>Status</th></tr>
+            <tr><td>Guest checkout / login gate</td><td>Modal popup, dismissible — guest checkout allowed</td><td>Guest checkout allowed — user prompted to create password after order</td><td><span class="status-ok">✅</span> Confirmed: keep guest checkout + redirect to create password → marketplace dashboard</td></tr>
+            <tr><td>Sign Up at checkout</td><td>✅ New users can sign up from checkout modal</td><td>Not in HH MP v2 — sign up separate</td><td><span class="status-part">〜</span> Flow difference</td></tr>
+            <tr><td>Benefits of signing in panel</td><td>✅ "Stored delivery info, view orders, download invoices"</td><td>Not in HH MP v2</td><td><span class="status-q">❓</span> Keep — good retention mechanic</td></tr>
+            <tr><td>Delivery address form</td><td>✅ Full address + building instructions</td><td>✅</td><td><span class="status-ok">✅</span></td></tr>
+            <tr><td>Point of Access</td><td>✅ Front Door / Loading Dock</td><td>Not in HH MP v2</td><td><span class="status-q">❓</span> Keep — practical for catering delivery</td></tr>
+            <tr><td>Security Check-In</td><td>✅ Yes / No</td><td>Not in HH MP v2</td><td><span class="status-q">❓</span> Keep — practical for catering delivery</td></tr>
+            <tr><td>Credit card payment</td><td>✅</td><td>✅</td><td><span class="status-ok">✅</span></td></tr>
+            <tr><td>Pay Later (ACH / Check / NET)</td><td>✅</td><td>Not in HH MP v2</td><td><span class="status-q">❓</span> Keep — important for corporate clients</td></tr>
+            <tr><td>Pre-authorisation note</td><td>✅ "Card charged at 11pm day of event"</td><td>Not in HH MP v2</td><td><span class="status-q">❓</span> Keep — important transparency</td></tr>
+            <tr><td>SELECT ACCOUNT</td><td>✅ Corporate billing account selector</td><td>Not in HH MP v2</td><td><span class="status-q">❓</span> Keep — important business feature</td></tr>
+            <tr><td>Items in order summary</td><td>✅</td><td>✅</td><td><span class="status-ok">✅</span></td></tr>
+            <tr><td>Subtotal</td><td>✅</td><td>✅</td><td><span class="status-ok">✅</span></td></tr>
+            <tr><td>Discount line item</td><td>✅ Maps to promo code</td><td>✅</td><td><span class="status-ok">✅</span></td></tr>
+            <tr><td>Delivery &amp; Service Fee</td><td>✅</td><td>✅</td><td><span class="status-ok">✅</span></td></tr>
+            <tr><td>Tax</td><td>✅</td><td>✅</td><td><span class="status-ok">✅</span></td></tr>
+            <tr><td>Gratuity</td><td>✅</td><td>Not in HH MP v2</td><td><span class="status-q">❓</span> <a class="q-ref" href="javascript:goToQuestion(10)">Q10</a></td></tr>
+            <tr><td>Total</td><td>✅</td><td>✅</td><td><span class="status-ok">✅</span></td></tr>
+            <tr><td>Price per head at checkout</td><td>✅ "Price per head for X people: $X/person"</td><td>Not in HH MP v2</td><td><span class="status-q">❓</span> <a class="q-ref" href="javascript:goToQuestion(1)">Q1</a></td></tr>
+            <tr><td>Weekday rate note</td><td>✅ "15% of subtotal"</td><td>Not in HH MP v2</td><td><span class="status-q">❓</span> Keep?</td></tr>
+            <tr><td>Pickup option</td><td>✗ Delivery only</td><td>✅ Required</td><td><span class="status-gap">✗</span></td></tr>
+            <tr><td>CC processing fee as line item</td><td>✗ Not visible</td><td>✅ Per-menu configurable fee</td><td><span class="status-gap">✗</span></td></tr>
+            <tr><td>Lead time enforcement</td><td>✗ Not visible at checkout</td><td>✅ Gates available dates</td><td><span class="status-gap">✗</span></td></tr>
+            <tr><td>Go Back to Cart</td><td>✅</td><td>✅</td><td><span class="status-ok">✅</span></td></tr>
+            <tr><td>Event date editability</td><td>Required but can "make a best guess and edit after checkout"</td><td>Date must be confirmed before checkout</td><td><span class="status-q">❓</span> <a class="q-ref" href="javascript:goToQuestion(11)">Q11</a></td></tr>
+        </table></div>
+    </details>
+
+    <details>
+        <summary>Thank You / Confirmation Screen<span class="summary-counts"><span class="count-badge count-q">Not reviewed</span></span></summary>
+        <div class="table-wrap"><table>
+            <tr><th colspan="4" style="color:var(--muted);font-weight:400;font-size:12px;text-transform:none;letter-spacing:0;">Not yet reviewed — access unavailable at time of audit. To be added.</th></tr>
+        </table></div>
+    </details>
+
+</div>
+</div>
+
+<script>
+    function switchTab(name) {
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        document.getElementById('tab-' + name).classList.add('active');
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById('btn-' + name).classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function goToQuestion(n) {
+        switchTab('questions');
+        setTimeout(() => {
+            const el = document.getElementById('qcard_' + n);
+            if (!el) return;
+            el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            el.classList.add('highlight');
+            setTimeout(() => el.classList.remove('highlight'), 1500);
+        }, 80);
+    }
+
+    const KEY = 'hungry_mp_call_';
+
+    function save(id, value) {
+        localStorage.setItem(KEY + 'note_' + id, value);
+        const flash = document.getElementById('sf_' + id);
+        if (flash) {
+            flash.classList.add('show');
+            clearTimeout(flash._t);
+            flash._t = setTimeout(() => flash.classList.remove('show'), 1200);
+        }
+    }
+
+    function saveRadio(id, value) {
+        localStorage.setItem(KEY + 'radio_' + id, value);
+    }
+
+    function saveCheck(id, checked) {
+        localStorage.setItem(KEY + 'check_' + id, checked ? '1' : '0');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        // Restore notes
+        document.querySelectorAll('textarea.note-input').forEach(ta => {
+            const id = ta.id.replace('note_', '');
+            const saved = localStorage.getItem(KEY + 'note_' + id);
+            if (saved) ta.value = saved;
+        });
+
+        // Restore radio buttons
+        ['2','3','4','7','10'].forEach(id => {
+            const val = localStorage.getItem(KEY + 'radio_' + id);
+            if (val) {
+                const radio = document.querySelector(`input[name="rd_${id}"][value="${val}"]`);
+                if (radio) radio.checked = true;
+            }
+        });
+
+        // Restore dashboard checkboxes
+        for (let i = 1; i <= 7; i++) {
+            const val = localStorage.getItem(KEY + 'check_dc_' + i);
+            if (val === '1') {
+                const cb = document.getElementById('dc_' + i);
+                if (cb) cb.checked = true;
+            }
+        }
+    });
+</script>
+
+</body>
+</html>
