@@ -276,7 +276,7 @@
             <div class="q-top">
                 <div class="q-meta"><span class="q-num">Q1</span><span class="q-audit-ref">audit ref #14</span><span class="tag tag-both">Both</span></div>
                 <div class="q-text">Headcount ordering model — keep headcount-driven or move to item-quantity for Individual Meals?</div>
-                <div class="q-context">Currently all items — platters and individual — use the same ordering model: you enter a headcount (number of people), and every item's price is calculated as <strong>price/person × headcount</strong>. You never select a quantity per item — the headcount drives everything. HH MP v2 would change this for Individual Meals only: customers would select how many units of each item they want (e.g. "3 sandwiches"), not how many people they're feeding. <strong>This decision gates the serving style tab build, the item modal redesign, the cart behaviour, and whether "Add Headcount" stays in the nav or is removed.</strong></div>
+                <div class="q-context">Currently all items use the same ordering model: you enter a headcount (number of people), and every item's price is calculated as <strong>price/person × headcount</strong>. You never select a quantity or size per item — the headcount drives everything.<br><br>HH MP v2 removes the global headcount input entirely. Each item type handles quantity differently instead: <strong>Platters</strong> are priced as a whole item (e.g. "$120, serves 10") with size variations as modifiers. <strong>Individual items</strong> are priced per unit — you pick a quantity ("3 sandwiches"). <strong>This decision gates the serving style tab build, the item modal redesign, the cart behaviour, and whether "Add Headcount" stays in the nav or is removed.</strong></div>
             </div>
             <div class="q-notes">
                 <div class="notes-label">Notes <span class="saved-flash" id="sf_1">Saved</span></div>
@@ -503,7 +503,7 @@
         <ul>
             <li><strong>Current marketplace is menu-centric, not restaurant-centric.</strong> Each menu is its own page. A chef can have multiple menus, each with its own page and its own separate order. HH MP v2 is one restaurant page showing all serving styles together.</li>
             <li><strong>Mixed-format ordering does not exist.</strong> A customer cannot currently order platters and individual items in the same order. This is a core feature of HH MP v2.</li>
-            <li><strong>Both menu types use the same headcount ordering model.</strong> Large-format and individually packaged menus both price by number of people (e.g. "$15/person, minimum 8 people"). HH MP v2 requires item-quantity ordering for Individual Meals.</li>
+            <li><strong>Both menu types use the same headcount ordering model.</strong> Large-format and individually packaged menus both price by number of people (e.g. "$15/person, minimum 8 people"). HH MP v2 removes the global headcount model entirely — Platters become stand-alone items priced as a whole with sizing handled via modifiers; Individual Meals use a standard unit quantity.</li>
             <li><strong>Individually packaged menus</strong> are a separate directory category today but are not a structurally different ordering experience — same page layout, same modal, same cart behaviour.</li>
             <li><strong>Hungry has several business features HH MP v2 does not account for</strong> — these should carry forward, not be treated as gaps: SELECT ACCOUNT (corporate billing), Point of Access, Security Check-In, Pay Later (ACH/Check/NET), pre-authorisation model, gratuity selector, weekday rate.</li>
         </ul>
@@ -645,7 +645,7 @@
             <tr><td>Dietary / allergen tags</td><td>✅</td><td>✅</td><td><span class="status-ok">✅</span></td></tr>
             <tr><td>Live price update</td><td>✅</td><td>✅</td><td><span class="status-ok">✅</span></td></tr>
             <tr><td>Add to cart CTA</td><td>✅</td><td>✅</td><td><span class="status-ok">✅</span></td></tr>
-            <tr><td>Quantity selector</td><td>Headcount-driven ("X people")</td><td>Item-quantity-driven (how many of this item)</td><td><span class="status-gap">✗</span> <a class="q-ref" href="javascript:goToQuestion(1)">Q1</a></td></tr>
+            <tr><td>Quantity selector</td><td>Headcount-driven ("X people")</td><td>No global headcount — Platters: item selected + size via modifier. Individual Meals: unit quantity ("how many of this item")</td><td><span class="status-gap">✗</span> <a class="q-ref" href="javascript:goToQuestion(1)">Q1</a></td></tr>
             <tr><td>Minimum per item</td><td>Shows "minimum X people" inline</td><td>Not shown in modal</td><td><span class="status-q">❓</span></td></tr>
             <tr><td>Item image</td><td>✗</td><td>✅</td><td><span class="status-gap">✗</span></td></tr>
             <tr><td>Serving size</td><td>✗</td><td>✅</td><td><span class="status-gap">✗</span></td></tr>
