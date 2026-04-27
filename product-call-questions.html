@@ -249,7 +249,7 @@
 
 <div class="header">
     <h1>Hungry Marketplace — Product Call Questions</h1>
-    <div class="header-meta">13 questions · Based on current-state-audit.md</div>
+    <div class="header-meta">14 questions · Based on current-state-audit.md</div>
     <div class="tab-bar">
         <button class="tab-btn active" id="btn-questions" onclick="switchTab('questions')">Questions</button>
         <button class="tab-btn" id="btn-audit" onclick="switchTab('audit')">Full Audit Reference</button>
@@ -356,41 +356,53 @@
 
         <div class="q-card" id="qcard_6">
             <div class="q-top">
-                <div class="q-meta"><span class="q-num">Q6</span><span class="q-audit-ref">audit ref #8</span><span class="tag tag-ui">UI</span></div>
-                <div class="q-text">Chef bio vs tagline — keep bio, replace with tagline, or show both?</div>
-                <div class="q-context">Currently a long paragraph bio with a "Hide Bio" toggle. HH MP v2 shows a short catering tagline only. Either direction drives a header redesign.</div>
+                <div class="q-meta"><span class="q-num">Q6</span><span class="tag tag-both">Both</span></div>
+                <div class="q-text">Do we enable pickup for v1 or hold for a later phase?</div>
+                <div class="q-context">Currently delivery only. HH MP v2 requires a Delivery / Pickup toggle in the restaurant page nav and a pickup option at checkout. The restaurant address question (Q8) is downstream of this — showing the address on the restaurant page implies pickup is available. If pickup is out of v1 scope, the toggle, address, and pickup checkout flow can all be deferred.</div>
             </div>
             <div class="q-notes">
                 <div class="notes-label">Notes <span class="saved-flash" id="sf_6">Saved</span></div>
-                <textarea class="note-input" id="note_6" placeholder="Keep bio / tagline only / both…" oninput="save('6', this.value)"></textarea>
+                <textarea class="note-input" id="note_6" placeholder="Enable in v1 / defer / scope…" oninput="save('6', this.value)"></textarea>
             </div>
         </div>
 
         <div class="q-card" id="qcard_7">
             <div class="q-top">
-                <div class="q-meta"><span class="q-num">Q7</span><span class="q-audit-ref">audit ref #9</span><span class="tag tag-tbd">Scope TBD</span></div>
-                <div class="q-text">Restaurant address on the restaurant page — show now or hold until pickup is live?</div>
-                <div class="q-context">Address data already exists at chef level in the system. HH MP v2 shows it below the banner. Showing it implies pickup is available — needs a call on pickup rollout timing.</div>
-            </div>
-            <div class="radio-decision">
-                <label class="radio-option opt-keep"><input type="radio" name="rd_7" value="keep" onchange="saveRadio('7','keep')"> Keep HUNGRY current</label>
-                <label class="radio-option opt-change"><input type="radio" name="rd_7" value="change" onchange="saveRadio('7','change')"> Change needed</label>
+                <div class="q-meta"><span class="q-num">Q7</span><span class="q-audit-ref">audit ref #8</span><span class="tag tag-ui">UI</span></div>
+                <div class="q-text">Chef bio vs tagline — keep bio, replace with tagline, or show both?</div>
+                <div class="q-context">Currently a long paragraph bio with a "Hide Bio" toggle. HH MP v2 shows a short catering tagline only. Either direction drives a header redesign.</div>
             </div>
             <div class="q-notes">
                 <div class="notes-label">Notes <span class="saved-flash" id="sf_7">Saved</span></div>
-                <textarea class="note-input" id="note_7" placeholder="Show now / hold for pickup / reasoning…" oninput="save('7', this.value)"></textarea>
+                <textarea class="note-input" id="note_7" placeholder="Keep bio / tagline only / both…" oninput="save('7', this.value)"></textarea>
             </div>
         </div>
 
         <div class="q-card" id="qcard_8">
             <div class="q-top">
-                <div class="q-meta"><span class="q-num">Q8</span><span class="q-audit-ref">audit ref #10</span><span class="tag tag-both">Both</span></div>
+                <div class="q-meta"><span class="q-num">Q8</span><span class="q-audit-ref">audit ref #9</span><span class="tag tag-tbd">Scope TBD</span></div>
+                <div class="q-text">Restaurant address on the restaurant page — show now or hold until pickup is live?</div>
+                <div class="q-context">Address data already exists at chef level in the system. HH MP v2 shows it below the banner. Showing it implies pickup is available — depends on the pickup decision (Q6).</div>
+            </div>
+            <div class="radio-decision">
+                <label class="radio-option opt-keep"><input type="radio" name="rd_8" value="keep" onchange="saveRadio('8','keep')"> Keep HUNGRY current</label>
+                <label class="radio-option opt-change"><input type="radio" name="rd_8" value="change" onchange="saveRadio('8','change')"> Change needed</label>
+            </div>
+            <div class="q-notes">
+                <div class="notes-label">Notes <span class="saved-flash" id="sf_8">Saved</span></div>
+                <textarea class="note-input" id="note_8" placeholder="Show now / hold for pickup / reasoning…" oninput="save('8', this.value)"></textarea>
+            </div>
+        </div>
+
+        <div class="q-card" id="qcard_9">
+            <div class="q-top">
+                <div class="q-meta"><span class="q-num">Q9</span><span class="q-audit-ref">audit ref #10</span><span class="tag tag-both">Both</span></div>
                 <div class="q-text">Restaurant info panel — what to include in v1?</div>
                 <div class="q-context">HH MP v2 has a side panel with map, address, and hours. A gallery has been flagged as especially valuable for catering and event chefs. Scope for v1 TBD.</div>
             </div>
             <div class="q-notes">
-                <div class="notes-label">Notes <span class="saved-flash" id="sf_8">Saved</span></div>
-                <textarea class="note-input" id="note_8" placeholder="v1 scope: map + address + hours / + gallery / other…" oninput="save('8', this.value)"></textarea>
+                <div class="notes-label">Notes <span class="saved-flash" id="sf_9">Saved</span></div>
+                <textarea class="note-input" id="note_9" placeholder="v1 scope: map + address + hours / + gallery / other…" oninput="save('9', this.value)"></textarea>
             </div>
         </div>
     </div>
@@ -399,31 +411,31 @@
     <div class="section-block">
         <div class="section-heading"><h2>Cart</h2></div>
 
-        <div class="q-card" id="qcard_9">
+        <div class="q-card" id="qcard_10">
             <div class="q-top">
-                <div class="q-meta"><span class="q-num">Q9</span><span class="q-audit-ref">audit ref #11</span><span class="tag tag-both">Both</span></div>
+                <div class="q-meta"><span class="q-num">Q10</span><span class="q-audit-ref">audit ref #11</span><span class="tag tag-both">Both</span></div>
                 <div class="q-text">Dietary Restrictions / Chef Notes — keep at order level, move to item level, or both?</div>
                 <div class="q-context">Currently a single text area at order level. HH MP v2 has special instructions per item in the item drawer. Moving to item level changes both the cart UI and the order data model.</div>
             </div>
             <div class="q-notes">
-                <div class="notes-label">Notes <span class="saved-flash" id="sf_9">Saved</span></div>
-                <textarea class="note-input" id="note_9" placeholder="Order level / item level / both…" oninput="save('9', this.value)"></textarea>
+                <div class="notes-label">Notes <span class="saved-flash" id="sf_10">Saved</span></div>
+                <textarea class="note-input" id="note_10" placeholder="Order level / item level / both…" oninput="save('10', this.value)"></textarea>
             </div>
         </div>
 
-        <div class="q-card" id="qcard_10">
+        <div class="q-card" id="qcard_11">
             <div class="q-top">
-                <div class="q-meta"><span class="q-num">Q10</span><span class="q-audit-ref">audit ref #12 &amp; #13</span><span class="tag tag-tbd">Scope TBD</span></div>
+                <div class="q-meta"><span class="q-num">Q11</span><span class="q-audit-ref">audit ref #12 &amp; #13</span><span class="tag tag-tbd">Scope TBD</span></div>
                 <div class="q-text">Promo code and gratuity selector — carry both forward?</div>
                 <div class="q-context">Both exist in the current cart. Neither is in HH MP v2. Can be decided together.</div>
             </div>
             <div class="radio-decision">
-                <label class="radio-option opt-keep"><input type="radio" name="rd_10" value="keep" onchange="saveRadio('10','keep')"> Keep HUNGRY current</label>
-                <label class="radio-option opt-change"><input type="radio" name="rd_10" value="change" onchange="saveRadio('10','change')"> Change needed</label>
+                <label class="radio-option opt-keep"><input type="radio" name="rd_11" value="keep" onchange="saveRadio('11','keep')"> Keep HUNGRY current</label>
+                <label class="radio-option opt-change"><input type="radio" name="rd_11" value="change" onchange="saveRadio('11','change')"> Change needed</label>
             </div>
             <div class="q-notes">
-                <div class="notes-label">Notes <span class="saved-flash" id="sf_10">Saved</span></div>
-                <textarea class="note-input" id="note_10" placeholder="Keep both / drop both / keep one…" oninput="save('10', this.value)"></textarea>
+                <div class="notes-label">Notes <span class="saved-flash" id="sf_11">Saved</span></div>
+                <textarea class="note-input" id="note_11" placeholder="Keep both / drop both / keep one…" oninput="save('11', this.value)"></textarea>
             </div>
         </div>
     </div>
@@ -432,15 +444,15 @@
     <div class="section-block">
         <div class="section-heading"><h2>Checkout</h2></div>
 
-        <div class="q-card" id="qcard_11">
+        <div class="q-card" id="qcard_12">
             <div class="q-top">
-                <div class="q-meta"><span class="q-num">Q11</span><span class="q-audit-ref">audit ref #15</span><span class="tag tag-functionality">Functionality</span></div>
+                <div class="q-meta"><span class="q-num">Q12</span><span class="q-audit-ref">audit ref #15</span><span class="tag tag-functionality">Functionality</span></div>
                 <div class="q-text">Event date post-checkout editing — keep current low-friction approach or lock date at checkout?</div>
-                <div class="q-context">Currently customers can "make a best guess and edit after checkout." HH MP v2 requires date confirmed before checkout. Note: once lead time enforcement is built, post-checkout editing may conflict with it.</div>
+                <div class="q-context">Currently customers can "make a best guess and edit after checkout." HH MP v2 requires date confirmed before checkout. <strong>Discussion point: How does post-checkout date editing currently work? Who can edit it and through what flow?</strong></div>
             </div>
             <div class="q-notes">
-                <div class="notes-label">Notes <span class="saved-flash" id="sf_11">Saved</span></div>
-                <textarea class="note-input" id="note_11" placeholder="Lock at checkout / keep editable / under what conditions…" oninput="save('11', this.value)"></textarea>
+                <div class="notes-label">Notes <span class="saved-flash" id="sf_12">Saved</span></div>
+                <textarea class="note-input" id="note_12" placeholder="Lock at checkout / keep editable / under what conditions…" oninput="save('12', this.value)"></textarea>
             </div>
         </div>
     </div>
@@ -449,21 +461,21 @@
     <div class="section-block">
         <div class="section-heading"><h2>Marketplace</h2></div>
 
-        <div class="q-card" id="qcard_12">
+        <div class="q-card" id="qcard_13">
             <div class="q-top">
-                <div class="q-meta"><span class="q-num">Q12</span><span class="q-audit-ref">audit ref #17</span><span class="tag tag-both">Both</span></div>
+                <div class="q-meta"><span class="q-num">Q13</span><span class="q-audit-ref">audit ref #17</span><span class="tag tag-both">Both</span></div>
                 <div class="q-text">Marketplace entry point — dedicated homepage or continue through the marketing site?</div>
                 <div class="q-context">Currently the marketplace is accessed via the marketing site nav. A dedicated marketplace URL/homepage could improve discoverability and cleanly separate marketing from transactional surfaces.</div>
             </div>
             <div class="q-notes">
-                <div class="notes-label">Notes <span class="saved-flash" id="sf_12">Saved</span></div>
-                <textarea class="note-input" id="note_12" placeholder="Dedicated homepage / stay in marketing site / timing…" oninput="save('12', this.value)"></textarea>
+                <div class="notes-label">Notes <span class="saved-flash" id="sf_13">Saved</span></div>
+                <textarea class="note-input" id="note_13" placeholder="Dedicated homepage / stay in marketing site / timing…" oninput="save('13', this.value)"></textarea>
             </div>
         </div>
 
-        <div class="q-card" id="qcard_13">
+        <div class="q-card" id="qcard_14">
             <div class="q-top">
-                <div class="q-meta"><span class="q-num">Q13</span><span class="tag tag-both">Both</span></div>
+                <div class="q-meta"><span class="q-num">Q14</span><span class="tag tag-both">Both</span></div>
                 <div class="q-text">Marketplace user dashboard — what to include in v1?</div>
                 <div class="q-context">
                     <strong>Confirmed:</strong> Guest checkout is kept. After placing an order as a guest, the user is prompted to create a password. Once created, they land on the marketplace user dashboard.<br><br>
@@ -483,8 +495,8 @@
                 </div>
             </div>
             <div class="q-notes">
-                <div class="notes-label">Additional notes <span class="saved-flash" id="sf_13">Saved</span></div>
-                <textarea class="note-input" id="note_13" placeholder="Any other features, priorities, or v2 items to note…" oninput="save('13', this.value)"></textarea>
+                <div class="notes-label">Additional notes <span class="saved-flash" id="sf_14">Saved</span></div>
+                <textarea class="note-input" id="note_14" placeholder="Any other features, priorities, or v2 items to note…" oninput="save('14', this.value)"></textarea>
             </div>
         </div>
     </div>
@@ -585,7 +597,7 @@
             <tr><th>Element</th><th>Current</th><th>HH MP v2</th><th>Status</th></tr>
             <tr><td>Address</td><td>Carried from directory — no date/time needed to browse</td><td>✅</td><td><span class="status-ok">✅</span></td></tr>
             <tr><td>Date/Time</td><td>✅ Optional, not required to browse</td><td>✅</td><td><span class="status-ok">✅</span></td></tr>
-            <tr><td>Delivery / Pickup toggle</td><td>✗</td><td>✅</td><td><span class="status-gap">✗</span></td></tr>
+            <tr><td>Delivery / Pickup toggle</td><td>✗</td><td>✅</td><td><span class="status-gap">✗</span> <a class="q-ref" href="javascript:goToQuestion(6)">Q6</a></td></tr>
             <tr><td>Login / Account</td><td>✅ In marketing top nav</td><td>✅</td><td><span class="status-ok">✅</span></td></tr>
             <tr><td>Headcount</td><td>"Add Headcount" shown in sub-nav</td><td>Not in HH MP v2</td><td><span class="status-q">❓</span> <a class="q-ref" href="javascript:goToQuestion(1)">Q1</a></td></tr>
         </table></div>
@@ -598,12 +610,12 @@
             <tr><td>Banner image</td><td>Upload capability exists; not all restaurants have uploaded one</td><td>✅ Always full-width</td><td><span class="status-part">〜</span> Data gap. Two states needed: with banner + fallback</td></tr>
             <tr><td>Chef headshot</td><td>✅ Exists at chef account level — shared across all menus</td><td>Not in HH MP v2</td><td><span class="status-gap">✗</span> Design to-do: add headshot to restaurant header wireframes (both states)</td></tr>
             <tr><td>Restaurant/menu name</td><td>✅</td><td>✅</td><td><span class="status-ok">✅</span></td></tr>
-            <tr><td>Chef bio</td><td>Long paragraph + "Hide Bio" toggle</td><td>Short catering tagline only</td><td><span class="status-q">❓</span> <a class="q-ref" href="javascript:goToQuestion(6)">Q6</a></td></tr>
+            <tr><td>Chef bio</td><td>Long paragraph + "Hide Bio" toggle</td><td>Short catering tagline only</td><td><span class="status-q">❓</span> <a class="q-ref" href="javascript:goToQuestion(7)">Q7</a></td></tr>
             <tr><td>Cuisine tags</td><td>✗</td><td>✅</td><td><span class="status-q">❓</span> <a class="q-ref" href="javascript:goToQuestion(5)">Q5</a></td></tr>
             <tr><td>Dietary tags</td><td>✗</td><td>✅</td><td><span class="status-q">❓</span> <a class="q-ref" href="javascript:goToQuestion(5)">Q5</a></td></tr>
             <tr><td>Feature badges</td><td>✗</td><td>✅</td><td><span class="status-q">❓</span> <a class="q-ref" href="javascript:goToQuestion(5)">Q5</a></td></tr>
-            <tr><td>Restaurant address</td><td>✗ (data exists at chef level)</td><td>✅ Below banner</td><td><span class="status-q">❓</span> <a class="q-ref" href="javascript:goToQuestion(7)">Q7</a></td></tr>
-            <tr><td>"Other Restaurant Info" button</td><td>✗</td><td>✅ Opens side panel (map, hours, address)</td><td><span class="status-gap">✗</span> <a class="q-ref" href="javascript:goToQuestion(8)">Q8</a> Scope TBD for v1</td></tr>
+            <tr><td>Restaurant address</td><td>✗ (data exists at chef level)</td><td>✅ Below banner</td><td><span class="status-q">❓</span> <a class="q-ref" href="javascript:goToQuestion(8)">Q8</a></td></tr>
+            <tr><td>"Other Restaurant Info" button</td><td>✗</td><td>✅ Opens side panel (map, hours, address)</td><td><span class="status-gap">✗</span> <a class="q-ref" href="javascript:goToQuestion(9)">Q9</a> Scope TBD for v1</td></tr>
         </table></div>
     </details>
 
@@ -671,9 +683,9 @@
             <tr><td>Grouped by serving style</td><td>✗ Flat list</td><td>✅ Grouped with serving style name + item count</td><td><span class="status-gap">✗</span></td></tr>
             <tr><td>Delivery details accordion</td><td>✗</td><td>✅ Address + date/time, expandable, editable</td><td><span class="status-gap">✗</span></td></tr>
             <tr><td>Group order panel</td><td>✗</td><td>✅ Above cart</td><td><span class="status-gap">✗</span></td></tr>
-            <tr><td>Dietary Restrictions / Chef Notes</td><td>✅ Order-level text area</td><td>Special instructions at item level</td><td><span class="status-q">❓</span> <a class="q-ref" href="javascript:goToQuestion(9)">Q9</a></td></tr>
-            <tr><td>Promo code</td><td>✅ Exists</td><td>Not in HH MP v2</td><td><span class="status-q">❓</span> <a class="q-ref" href="javascript:goToQuestion(10)">Q10</a></td></tr>
-            <tr><td>Gratuity selector (5% / 10% / 15%)</td><td>✅ Exists</td><td>Not in HH MP v2</td><td><span class="status-q">❓</span> <a class="q-ref" href="javascript:goToQuestion(10)">Q10</a></td></tr>
+            <tr><td>Dietary Restrictions / Chef Notes</td><td>✅ Order-level text area</td><td>Special instructions at item level</td><td><span class="status-q">❓</span> <a class="q-ref" href="javascript:goToQuestion(10)">Q10</a></td></tr>
+            <tr><td>Promo code</td><td>✅ Exists</td><td>Not in HH MP v2</td><td><span class="status-q">❓</span> <a class="q-ref" href="javascript:goToQuestion(11)">Q11</a></td></tr>
+            <tr><td>Gratuity selector (5% / 10% / 15%)</td><td>✅ Exists</td><td>Not in HH MP v2</td><td><span class="status-q">❓</span> <a class="q-ref" href="javascript:goToQuestion(11)">Q11</a></td></tr>
             <tr><td>Checkout gate</td><td>Requires delivery date + headcount</td><td>Date only (headcount tied to ordering model)</td><td><span class="status-q">❓</span> <a class="q-ref" href="javascript:goToQuestion(1)">Q1</a></td></tr>
             <tr><td>Price per head / headcount display</td><td>✅ Shows in cart</td><td>Not in HH MP v2</td><td><span class="status-q">❓</span> <a class="q-ref" href="javascript:goToQuestion(1)">Q1</a></td></tr>
             <tr><td>Utensils prompt</td><td>✗</td><td>✅ When no utensils added</td><td><span class="status-gap">✗</span></td></tr>
@@ -699,15 +711,15 @@
             <tr><td>Discount line item</td><td>✅ Maps to promo code</td><td>✅</td><td><span class="status-ok">✅</span></td></tr>
             <tr><td>Delivery &amp; Service Fee</td><td>✅</td><td>✅</td><td><span class="status-ok">✅</span></td></tr>
             <tr><td>Tax</td><td>✅</td><td>✅</td><td><span class="status-ok">✅</span></td></tr>
-            <tr><td>Gratuity</td><td>✅</td><td>Not in HH MP v2</td><td><span class="status-q">❓</span> <a class="q-ref" href="javascript:goToQuestion(10)">Q10</a></td></tr>
+            <tr><td>Gratuity</td><td>✅</td><td>Not in HH MP v2</td><td><span class="status-q">❓</span> <a class="q-ref" href="javascript:goToQuestion(11)">Q11</a></td></tr>
             <tr><td>Total</td><td>✅</td><td>✅</td><td><span class="status-ok">✅</span></td></tr>
             <tr><td>Price per head at checkout</td><td>✅ "Price per head for X people: $X/person"</td><td>Not in HH MP v2</td><td><span class="status-q">❓</span> <a class="q-ref" href="javascript:goToQuestion(1)">Q1</a></td></tr>
             <tr><td>Weekday rate note</td><td>✅ "15% of subtotal"</td><td>Not in HH MP v2</td><td><span class="status-q">❓</span> Keep?</td></tr>
-            <tr><td>Pickup option</td><td>✗ Delivery only</td><td>✅ Required</td><td><span class="status-gap">✗</span></td></tr>
+            <tr><td>Pickup option</td><td>✗ Delivery only</td><td>✅ Required</td><td><span class="status-gap">✗</span> <a class="q-ref" href="javascript:goToQuestion(6)">Q6</a></td></tr>
             <tr><td>CC processing fee as line item</td><td>✗ Not visible</td><td>✅ Per-menu configurable fee</td><td><span class="status-gap">✗</span></td></tr>
             <tr><td>Lead time enforcement</td><td>✗ Not visible at checkout</td><td>✅ Gates available dates</td><td><span class="status-gap">✗</span></td></tr>
             <tr><td>Go Back to Cart</td><td>✅</td><td>✅</td><td><span class="status-ok">✅</span></td></tr>
-            <tr><td>Event date editability</td><td>Required but can "make a best guess and edit after checkout"</td><td>Date must be confirmed before checkout</td><td><span class="status-q">❓</span> <a class="q-ref" href="javascript:goToQuestion(11)">Q11</a></td></tr>
+            <tr><td>Event date editability</td><td>Required but can "make a best guess and edit after checkout"</td><td>Date must be confirmed before checkout</td><td><span class="status-q">❓</span> <a class="q-ref" href="javascript:goToQuestion(12)">Q12</a></td></tr>
         </table></div>
     </details>
 
@@ -770,7 +782,7 @@
         });
 
         // Restore radio buttons
-        ['2','3','4','7','10'].forEach(id => {
+        ['2','3','4','8','11'].forEach(id => {
             const val = localStorage.getItem(KEY + 'radio_' + id);
             if (val) {
                 const radio = document.querySelector(`input[name="rd_${id}"][value="${val}"]`);
